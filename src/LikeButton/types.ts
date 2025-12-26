@@ -1,33 +1,33 @@
-import type { UseLikeButtonOptions } from "./useLikeButton";
+import type { UseLikeButtonOptions } from "./useLikeButton"
 
 /** Props passed to custom icon render function */
 export interface IconRenderProps {
   /** Suggested icon size in pixels (50% of button size by default) */
-  size: number;
+  size: number
   /** Base CSS classes for positioning and transitions */
-  className: string;
+  className: string
   /** Whether button is at max clicks */
-  isMaxed: boolean;
+  isMaxed: boolean
   /** Current fill percentage (0-100) */
-  fillPercentage: number;
+  fillPercentage: number
 }
 
 /** Preset shape values */
-export type ShapePreset = "circle" | "rounded" | "square";
+export type ShapePreset = "circle" | "rounded" | "square"
 
 /** Custom shape configuration */
 export interface CustomShape {
   /** CSS border-radius value (e.g., "1rem", "50%", "1rem 2rem") */
-  borderRadius?: string;
+  borderRadius?: string
   /** CSS clip-path value for custom shapes (e.g., "polygon(...)", "circle(...)") */
-  clipPath?: string;
+  clipPath?: string
 }
 
 /** Shape prop type - either a preset or custom configuration */
-export type Shape = ShapePreset | CustomShape;
+export type Shape = ShapePreset | CustomShape
 
 /** Preset cursor values */
-export type CursorPreset = "heart" | "star" | "thumbs-up" | "pointer" | "none";
+export type CursorPreset = "heart" | "star" | "thumbs-up" | "pointer" | "none"
 
 /** Custom cursor configuration */
 export interface CustomCursor {
@@ -36,13 +36,13 @@ export interface CustomCursor {
    * @example "data:image/svg+xml;utf8,<svg>...</svg>"
    * @example "/cursors/my-cursor.png"
    */
-  url: string;
+  url: string
   /** Hotspot X coordinate (default: 16) */
-  hotspotX?: number;
+  hotspotX?: number
   /** Hotspot Y coordinate (default: 16) */
-  hotspotY?: number;
+  hotspotY?: number
   /** Fallback cursor if custom cursor fails to load (default: "pointer") */
-  fallback?: "pointer" | "default" | "grab";
+  fallback?: "pointer" | "default" | "grab"
 }
 
 /**
@@ -54,20 +54,20 @@ export interface CustomCursor {
  * - "none": Hides cursor entirely
  * - CustomCursor: Custom cursor with URL and hotspot configuration
  */
-export type Cursor = CursorPreset | CustomCursor;
+export type Cursor = CursorPreset | CustomCursor
 
 /** Override brutalist styling */
 export interface StyleOverrides {
   /** Border width in pixels (default: 4) */
-  borderWidth?: number;
+  borderWidth?: number
   /** Border color (default: "#111827") */
-  borderColor?: string;
+  borderColor?: string
   /** Shadow offset in pixels (default: 8) */
-  shadowOffset?: number;
+  shadowOffset?: number
   /** Shadow color (default: "#111827") */
-  shadowColor?: string;
+  shadowColor?: string
   /** Background color (default: "white") */
-  backgroundColor?: string;
+  backgroundColor?: string
 }
 
 /**
@@ -76,28 +76,40 @@ export interface StyleOverrides {
  */
 export interface BaseLikeButtonProps extends UseLikeButtonOptions {
   /** Button size in pixels */
-  size?: number;
+  size?: number
   /** Fill color for the liquid effect */
-  fillColor?: string;
+  fillColor?: string
   /** Wave color (darker shade for back wave) */
-  waveColor?: string;
+  waveColor?: string
   /** Additional CSS class name */
-  className?: string;
+  className?: string
+  /**
+   * Initial/minimum fill percentage shown even before any clicks.
+   * Useful for custom shapes with narrow bottoms (e.g., hearts, diamonds)
+   * where low fill percentages may be invisible.
+   *
+   * Valid range: 0-85 (values above 85 will be clamped to 85)
+   * @default 0
+   * @example
+   * // Show 15% minimum fill for a heart shape
+   * <LikeButton minFillPercent={15} shape={{ clipPath: "polygon(...)" }} />
+   */
+  minFillPercent?: number
   /**
    * Custom icon render function.
    * - If undefined: renders default heart icon
    * - If null: renders no icon
    * - If function: calls with IconRenderProps
    */
-  renderIcon?: ((props: IconRenderProps) => React.ReactNode) | null;
+  renderIcon?: ((props: IconRenderProps) => React.ReactNode) | null
   /**
    * Button shape.
    * - Presets: "circle" (default), "rounded", "square"
    * - Custom: { borderRadius?: string, clipPath?: string }
    */
-  shape?: Shape;
+  shape?: Shape
   /** Override brutalist styling (border, shadow, background) */
-  styles?: StyleOverrides;
+  styles?: StyleOverrides
   /**
    * Cursor displayed when hovering over the button.
    * - "heart" (default): Heart-shaped cursor
@@ -107,7 +119,7 @@ export interface BaseLikeButtonProps extends UseLikeButtonOptions {
    * - "none": Hides cursor
    * - CustomCursor: { url, hotspotX?, hotspotY?, fallback? }
    */
-  cursor?: Cursor;
+  cursor?: Cursor
 }
 
 /** Props for the LikeButton component (Tailwind version) */
@@ -115,4 +127,3 @@ export interface LikeButtonProps extends BaseLikeButtonProps {}
 
 /** Props for the LikeButton component (Vanilla CSS version) */
 export interface LikeButtonVanillaProps extends BaseLikeButtonProps {}
-

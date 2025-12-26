@@ -1,18 +1,21 @@
-import { useId, useMemo } from "react";
-import { useLikeButton, LIKE_BUTTON_DEFAULTS } from "./useLikeButton";
-import { ParticleVanilla } from "../Particle/Particle.vanilla";
-import { DefaultHeartIcon } from "./DefaultHeartIcon";
-import type { LikeButtonVanillaProps, IconRenderProps } from "./types";
+import { useId, useMemo } from "react"
+import { ParticleVanilla } from "../Particle/Particle.vanilla"
+import { DefaultHeartIcon } from "./DefaultHeartIcon"
+import type { IconRenderProps, LikeButtonVanillaProps } from "./types"
+import { LIKE_BUTTON_DEFAULTS, useLikeButton } from "./useLikeButton"
 import {
-  DEFAULT_STYLES,
-  getShapeStyles,
-  computeHoverOffset,
   computeButtonStyles,
+  computeHoverOffset,
+  DEFAULT_STYLES,
   generateDynamicStyles,
   getCursorStyle,
-} from "./utils";
+  getShapeStyles,
+} from "./utils"
 
-export type { LikeButtonVanillaProps };
+export type { LikeButtonVanillaProps }
+
+// Maximum fill height percentage (leaves room for wave animation at top)
+const MAX_FILL_HEIGHT = 85
 
 /**
  * LikeButton - Animated like button with liquid fill and particle effects.
@@ -39,6 +42,9 @@ export type { LikeButtonVanillaProps };
  * // Custom cursor
  * <LikeButtonVanilla cursor="star" />
  * <LikeButtonVanilla cursor={{ url: "data:image/svg+xml;...", hotspotX: 16, hotspotY: 16 }} />
+ *
+ * // Minimum fill for custom shapes
+ * <LikeButtonVanilla minFillPercent={15} shape={{ clipPath: "polygon(...)" }} />
  * ```
  */
 export function LikeButtonVanilla({
@@ -51,11 +57,14 @@ export function LikeButtonVanilla({
   shape = "circle",
   styles = {},
   cursor = "heart",
+  minFillPercent = 0,
   ...hookOptions
 }: LikeButtonVanillaProps) {
+  // Clamp minFillPercent to valid range (0-85)
+  const clampedMinFill = Math.max(0, Math.min(MAX_FILL_HEIGHT, minFillPercent))
   // Hooks must be called first and in consistent order
-  const reactId = useId();
-  const buttonId = `like-button${reactId.replace(/:/g, "-")}`;
+  const reactId = useId()
+  const buttonId = `like-button${reactId.replace(/:/g, "-")}`
 
   const {
     handleClick,
@@ -66,53 +75,49 @@ export function LikeButtonVanilla({
     isMaxed,
     fillPercentage,
     particles,
-  } = useLikeButton({ showParticles, ...hookOptions });
+  } = useLikeButton({ showParticles, ...hookOptions })
 
   // Memoize style computations
-  const mergedStyles = useMemo(
-    () => ({ ...DEFAULT_STYLES, ...styles }),
-    [styles],
-  );
+  const mergedStyles = useMemo(() => ({ ...DEFAULT_STYLES, ...styles }), [styles])
 
-  const shapeStyles = useMemo(() => getShapeStyles(shape), [shape]);
+  const shapeStyles = useMemo(() => getShapeStyles(shape), [shape])
 
   const buttonStyle = useMemo(
     () => computeButtonStyles(size, mergedStyles, shapeStyles),
     [size, mergedStyles, shapeStyles],
-  );
+  )
 
   const hoverShadowOffset = useMemo(
     () => computeHoverOffset(mergedStyles.shadowOffset),
     [mergedStyles.shadowOffset],
-  );
+  )
 
   const dynamicStyles = useMemo(
-    () =>
-      generateDynamicStyles(`#${buttonId}`, hoverShadowOffset, mergedStyles),
+    () => generateDynamicStyles(`#${buttonId}`, hoverShadowOffset, mergedStyles),
     [buttonId, hoverShadowOffset, mergedStyles],
-  );
+  )
 
   // Cursor style (not-allowed when disabled)
   const cursorStyle = useMemo(
     () => (disabled ? "not-allowed" : getCursorStyle(cursor)),
     [cursor, disabled],
-  );
+  )
 
   // Icon configuration
-  const iconSize = size * 0.5;
+  const iconSize = size * 0.5
   const iconRenderProps: IconRenderProps = {
     size: iconSize,
     className: "like-button__icon",
     isMaxed,
     fillPercentage,
-  };
+  }
 
   const renderedIcon =
     renderIcon === null ? null : renderIcon === undefined ? (
       <DefaultHeartIcon {...iconRenderProps} />
     ) : (
       renderIcon(iconRenderProps)
-    );
+    )
 
   return (
     <div className="like-button-container">
@@ -136,7 +141,9 @@ export function LikeButtonVanilla({
           className="like-button__fill"
           style={{
             backgroundColor: fillColor,
-            height: isMaxed ? "100%" : `${fillPercentage * 0.85}%`,
+            height: isMaxed
+              ? "100%"
+              : `${clampedMinFill + (fillPercentage / 100) * (MAX_FILL_HEIGHT - clampedMinFill)}%`,
           }}
         >
           {/* Wave 1 (Back Layer) */}
@@ -185,8 +192,7 @@ export function LikeButtonVanilla({
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default LikeButtonVanilla;
-
+export default LikeButtonVanilla
