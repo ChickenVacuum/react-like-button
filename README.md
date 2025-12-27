@@ -69,7 +69,7 @@ function App() {
 
 ### Built-in Presets
 
-Choose from 5 professionally designed particle effects:
+Choose from 5 designed particle effects:
 
 ```tsx
 // Quick explosion of hearts (12 particles)
@@ -90,7 +90,7 @@ Choose from 5 professionally designed particle effects:
 
 ### Custom Particle Configuration
 
-Fully customize particle behavior:
+Or fully customize particle behavior:
 
 ```tsx
 <LikeButton particleConfig={{
