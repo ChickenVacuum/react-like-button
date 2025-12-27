@@ -45,6 +45,25 @@ const MAX_FILL_HEIGHT = 85
  *
  * // Minimum fill for custom shapes
  * <LikeButtonVanilla minFillPercent={15} shape={{ clipPath: "polygon(...)" }} />
+ *
+ * // Particle presets (same API as Tailwind version)
+ * <LikeButtonVanilla particlePreset="burst" />
+ * <LikeButtonVanilla particlePreset="confetti" />
+ * <LikeButtonVanilla particlePreset="fireworks" />
+ *
+ * // Custom particle configuration
+ * <LikeButtonVanilla particleConfig={{
+ *   shape: 'star',
+ *   colors: ['#FFD700', '#FFA500'],
+ *   count: 15,
+ *   speed: 800
+ * }} />
+ *
+ * // Combine preset with custom config
+ * <LikeButtonVanilla
+ *   particlePreset="burst"
+ *   particleConfig={{ count: 20 }}
+ * />
  * ```
  */
 export function LikeButtonVanilla({

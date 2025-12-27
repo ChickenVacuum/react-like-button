@@ -4,7 +4,8 @@
   position: absolute;
   width: 40px;
   height: 40px;
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Transition properties (duration, timing-function) are set inline via style prop */
+  transition-property: transform, opacity;
 }
 
 .particle__icon {

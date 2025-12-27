@@ -1,29 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import type { ParticleShape } from "./types"
 
 /** Props for particle components */
 export interface ParticleProps {
   /** Angle in degrees (0-360) for particle direction */
-  angle: number;
+  angle: number
   /** Distance in pixels the particle travels */
-  distance: number;
+  distance: number
   /** Scale multiplier for particle size */
-  scale: number;
+  scale: number
   /** Color of the particle (hex or CSS color) */
-  color: string;
+  color: string
+  /** Particle shape (preset or custom) */
+  shape: ParticleShape
+  /** Animation duration in milliseconds */
+  speed: number
+  /** CSS easing function for animation */
+  easing: string
+  /** Whether particle should fade out */
+  fadeOut: boolean
 }
 
 /** Return type for the useParticle hook */
 export interface UseParticleReturn {
   /** Whether the animation has started */
-  isAnimating: boolean;
+  isAnimating: boolean
   /** X position offset in pixels */
-  x: number;
+  x: number
   /** Y position offset in pixels */
-  y: number;
+  y: number
   /** Computed transform string */
-  transform: string;
+  transform: string
   /** Computed opacity value */
-  opacity: number;
+  opacity: number
+  /** Animation duration in milliseconds */
+  speed: number
+  /** CSS easing function */
+  easing: string
+  /** Whether to fade out */
+  fadeOut: boolean
 }
 
 /**
@@ -34,18 +49,24 @@ export function useParticle({
   angle,
   distance,
   scale,
-}: Pick<ParticleProps, "angle" | "distance" | "scale">): UseParticleReturn {
-  const [isAnimating, setIsAnimating] = useState(false);
+  speed,
+  easing,
+  fadeOut,
+}: Pick<
+  ParticleProps,
+  "angle" | "distance" | "scale" | "speed" | "easing" | "fadeOut"
+>): UseParticleReturn {
+  const [isAnimating, setIsAnimating] = useState(false)
 
   // Trigger animation after mount
   useEffect(() => {
-    const timer = requestAnimationFrame(() => setIsAnimating(true));
-    return () => cancelAnimationFrame(timer);
-  }, []);
+    const timer = requestAnimationFrame(() => setIsAnimating(true))
+    return () => cancelAnimationFrame(timer)
+  }, [])
 
   // Calculate final position
-  const x = Math.cos((angle * Math.PI) / 180) * distance;
-  const y = Math.sin((angle * Math.PI) / 180) * distance;
+  const x = Math.cos((angle * Math.PI) / 180) * distance
+  const y = Math.sin((angle * Math.PI) / 180) * distance
 
   return {
     isAnimating,
@@ -55,6 +76,8 @@ export function useParticle({
       ? `translate(${x}px, ${y}px) scale(${scale})`
       : "translate(0, 0) scale(0)",
     opacity: isAnimating ? 0 : 1,
-  };
+    speed,
+    easing,
+    fadeOut,
+  }
 }
-
