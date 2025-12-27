@@ -4,6 +4,8 @@
 |--------|--------|--------|--------|
 | ![Full hearth SVG](docs/header_demos/multi_like_button_hearth_svg.gif) | ![Round with sparks](docs/header_demos/multi_like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/multi_like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/multi_like_button_square_star.gif) |
 
+_(The gifs are accelerated and chopped, the effects would render better in real life)_
+
 
 An animated like button component with liquid fill effect and customizable particle animations. Available in both Tailwind CSS and vanilla CSS versions.
 
