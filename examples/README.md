@@ -114,12 +114,6 @@ const customShape: CustomParticleShape = {
 <LikeButton particleConfig={{ shape: customShape }} />
 ```
 
-## Documentation
-
-For more detailed documentation, see:
-- [Particle System Guide](../docs/PARTICLE_SYSTEM.md)
-- [Main README](../README.md)
-
 ## Contributing
 
 Feel free to add more examples! Please follow the existing structure and include:
