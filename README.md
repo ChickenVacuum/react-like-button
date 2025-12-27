@@ -352,16 +352,16 @@ Contributions are welcome! Please open an issue or pull request on GitHub.
 
 ## License
 
-MIT © [jepepa](https://github.com/jepepa)
+MIT © [jepepa](https://jepepa.com)
 
 ## Credits
 
-Created by [jepepa](https://github.com/jepepa)
+Created by [jepepa](https://github.com/ChickenVacuum)
 
 ## Support
 
-- 🐛 [Report a bug](https://github.com/jepepa/react-multi-like-button/issues)
-- 💡 [Request a feature](https://github.com/jepepa/react-multi-like-button/issues)
-- ⭐ [Star on GitHub](https://github.com/jepepa/react-multi-like-button)
+- 🐛 [Report a bug](https://github.com/ChickenVacuum/react-multi-like-button/issues)
+- 💡 [Request a feature](https://github.com/ChickenVacuum/react-multi-like-button/issues)
+- ⭐ [Star on GitHub](https://github.com/ChickenVacuum/react-multi-like-button)
 
 
