@@ -1,4 +1,6 @@
-// Headless hook (logic only)
+// ============================================================================
+// CORE COMPONENTS
+// ============================================================================
 
 // Default icon (can be used as reference for custom icons)
 export { DefaultHeartIcon } from "./LikeButton/DefaultHeartIcon"
@@ -6,7 +8,24 @@ export { DefaultHeartIcon } from "./LikeButton/DefaultHeartIcon"
 export { LikeButton, LikeButton as default } from "./LikeButton/LikeButton"
 // Vanilla CSS version (also available from ./vanilla entry)
 export { LikeButtonVanilla } from "./LikeButton/LikeButton.vanilla"
-// Types for customization
+
+// ============================================================================
+// HEADLESS HOOK
+// ============================================================================
+
+export { LIKE_BUTTON_DEFAULTS, useLikeButton } from "./LikeButton/useLikeButton"
+
+// ============================================================================
+// PARTICLE PRESETS
+// ============================================================================
+
+export { PARTICLE_PRESETS } from "./Particle/presets"
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+// LikeButton component types
 export type {
   BaseLikeButtonProps,
   Cursor,
@@ -20,17 +39,15 @@ export type {
   ShapePreset,
   StyleOverrides,
 } from "./LikeButton/types"
+
+// Headless hook types
 export type {
   ParticleData,
   UseLikeButtonOptions,
   UseLikeButtonReturn,
 } from "./LikeButton/useLikeButton"
-export { LIKE_BUTTON_DEFAULTS, useLikeButton } from "./LikeButton/useLikeButton"
 
-// Particle components
-export { Particle } from "./Particle/Particle"
-export { ParticleVanilla } from "./Particle/Particle.vanilla"
-// Particle types
+// Particle configuration types
 export type {
   CustomParticleShape,
   ParticleConfig,
@@ -40,5 +57,3 @@ export type {
   ParticleShapeProps,
   Range,
 } from "./Particle/types"
-export type { ParticleProps, UseParticleReturn } from "./Particle/useParticle"
-export { useParticle } from "./Particle/useParticle"
