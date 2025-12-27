@@ -58,11 +58,15 @@
     "brutalist",
     "tailwind"
   ],
-  "author": "",
+  "author": "Jepepa",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/ChickenVacuum/react-multi-like-button"
+  },
+  "homepage": "https://github.com/ChickenVacuum/react-multi-like-button#readme",
+  "bugs": {
+    "url": "https://github.com/ChickenVacuum/react-multi-like-button/issues"
   },
   "peerDependencies": {
     "react": "^19.2.3",
