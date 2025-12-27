@@ -18,4 +18,3 @@ export function CircleShape({ size, color, className = "" }: ParticleShapeProps)
     </svg>
   )
 }
-

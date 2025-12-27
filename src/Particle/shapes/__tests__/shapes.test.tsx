@@ -1,10 +1,10 @@
 import { render } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
-import { HeartShape } from "../HeartShape"
-import { StarShape } from "../StarShape"
+import { describe, expect, it } from "vitest"
 import { CircleShape } from "../CircleShape"
-import { SquareShape } from "../SquareShape"
+import { HeartShape } from "../HeartShape"
 import { SparkleShape } from "../SparkleShape"
+import { SquareShape } from "../SquareShape"
+import { StarShape } from "../StarShape"
 
 describe("Particle Shape Components", () => {
   describe("HeartShape", () => {
@@ -57,9 +57,7 @@ describe("Particle Shape Components", () => {
     })
 
     it("renders with custom className", () => {
-      const { container } = render(
-        <StarShape size={50} color="#FFD700" className="star-custom" />,
-      )
+      const { container } = render(<StarShape size={50} color="#FFD700" className="star-custom" />)
       const svg = container.querySelector("svg")
       expect(svg).toHaveClass("star-custom")
     })
@@ -147,4 +145,3 @@ describe("Particle Shape Components", () => {
     })
   })
 })
-

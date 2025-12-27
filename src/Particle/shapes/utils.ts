@@ -1,22 +1,22 @@
 import type { ParticleShape, ParticleShapeProps } from "../types"
-import { HeartShape } from "./HeartShape"
-import { StarShape } from "./StarShape"
 import { CircleShape } from "./CircleShape"
-import { SquareShape } from "./SquareShape"
+import { HeartShape } from "./HeartShape"
 import { SparkleShape } from "./SparkleShape"
+import { SquareShape } from "./SquareShape"
+import { StarShape } from "./StarShape"
 
 /**
  * Get the appropriate shape component based on shape configuration.
- * 
+ *
  * @param shape - Either a preset shape name or custom shape config
  * @returns React component that renders the shape
- * 
+ *
  * @example
  * ```tsx
  * const ShapeComponent = getParticleShape('star');
  * return <ShapeComponent size={40} color="#FFD700" />;
  * ```
- * 
+ *
  * @example
  * ```tsx
  * const ShapeComponent = getParticleShape({
@@ -25,9 +25,7 @@ import { SparkleShape } from "./SparkleShape"
  * return <ShapeComponent size={40} color="#FFD700" />;
  * ```
  */
-export function getParticleShape(
-  shape: ParticleShape,
-): React.ComponentType<ParticleShapeProps> {
+export function getParticleShape(shape: ParticleShape): React.ComponentType<ParticleShapeProps> {
   // Handle custom shape
   if (typeof shape === "object" && "render" in shape) {
     // Return a wrapper component that calls the custom render function
@@ -52,4 +50,3 @@ export function getParticleShape(
       return HeartShape
   }
 }
-

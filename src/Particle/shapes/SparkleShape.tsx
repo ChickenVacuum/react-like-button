@@ -18,4 +18,3 @@ export function SparkleShape({ size, color, className = "" }: ParticleShapeProps
     </svg>
   )
 }
-
