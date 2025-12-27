@@ -468,4 +468,354 @@ describe("LikeButton", () => {
       expect(fill).toHaveStyle({ height: "100%" })
     })
   })
+
+  describe("particle presets", () => {
+    it("should render with burst preset", () => {
+      render(<LikeButton particlePreset="burst" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toBeInTheDocument()
+    })
+
+    it("should render with fountain preset", () => {
+      render(<LikeButton particlePreset="fountain" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toBeInTheDocument()
+    })
+
+    it("should render with confetti preset", () => {
+      render(<LikeButton particlePreset="confetti" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toBeInTheDocument()
+    })
+
+    it("should render with gentle preset", () => {
+      render(<LikeButton particlePreset="gentle" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toBeInTheDocument()
+    })
+
+    it("should render with fireworks preset", () => {
+      render(<LikeButton particlePreset="fireworks" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toBeInTheDocument()
+    })
+
+    it("should spawn particles with burst preset on click", () => {
+      render(<LikeButton particlePreset="burst" />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Burst preset spawns 12 particles
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(12)
+    })
+
+    it("should spawn particles with fountain preset on click", () => {
+      render(<LikeButton particlePreset="fountain" />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Fountain preset spawns 10 particles
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(10)
+    })
+
+    it("should spawn particles with confetti preset on click", () => {
+      render(<LikeButton particlePreset="confetti" />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Confetti preset spawns 15 particles
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(15)
+    })
+
+    it("should spawn particles with gentle preset on click", () => {
+      render(<LikeButton particlePreset="gentle" />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Gentle preset spawns 6 particles
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(6)
+    })
+
+    it("should spawn particles with fireworks preset on click", () => {
+      render(<LikeButton particlePreset="fireworks" />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Fireworks preset spawns 16 particles
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(16)
+    })
+  })
+
+  describe("custom particle configuration", () => {
+    it("should render with custom particle count", () => {
+      render(<LikeButton particleConfig={{ count: 25 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(25)
+    })
+
+    it("should render with custom particle shape", () => {
+      render(<LikeButton particleConfig={{ shape: "star" }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Particles should be rendered
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should render with custom particle colors", () => {
+      render(<LikeButton particleConfig={{ colors: ["#ff0000", "#00ff00"] }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should merge preset with custom config", () => {
+      render(<LikeButton particlePreset="burst" particleConfig={{ count: 30 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Custom count should override preset count
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(30)
+    })
+
+    it("should render with custom speed", () => {
+      render(<LikeButton particleConfig={{ speed: 2000 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should render with custom easing", () => {
+      render(<LikeButton particleConfig={{ easing: "ease-in-out" }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should render with fadeOut disabled", () => {
+      render(<LikeButton particleConfig={{ fadeOut: false }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should render with custom distance range", () => {
+      render(<LikeButton particleConfig={{ distance: { min: 100, max: 200 } }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should render with custom size range", () => {
+      render(<LikeButton particleConfig={{ size: { min: 2.0, max: 3.0 } }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should render with custom spread and offset", () => {
+      render(<LikeButton particleConfig={{ spread: 90, spreadOffset: -90 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe("particle rendering and cleanup", () => {
+    it("should render particles after click", () => {
+      render(<LikeButton />)
+
+      const button = screen.getByRole("button")
+
+      // No particles initially
+      let particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(0)
+
+      // Click to spawn particles
+      fireEvent.click(button)
+
+      // Particles should be rendered
+      particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should not render particles when showParticles is false", () => {
+      render(<LikeButton showParticles={false} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(0)
+    })
+
+    it("should render particles with correct shape components", () => {
+      render(<LikeButton particleConfig={{ shape: "star" }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Particles should contain SVG elements (shapes are SVG-based)
+      const svgs = document.querySelectorAll('[aria-hidden="true"] svg')
+      expect(svgs.length).toBeGreaterThan(0)
+    })
+
+    it("should render particles with heart shape by default", () => {
+      render(<LikeButton />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const svgs = document.querySelectorAll('[aria-hidden="true"] svg')
+      expect(svgs.length).toBeGreaterThan(0)
+    })
+
+    it("should spawn new particles on each click", () => {
+      render(<LikeButton particleConfig={{ count: 5 }} />)
+
+      const button = screen.getByRole("button")
+
+      // First click
+      fireEvent.click(button)
+      let particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(5)
+
+      // Second click (particles accumulate briefly before cleanup)
+      fireEvent.click(button)
+      particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThanOrEqual(5)
+    })
+  })
+
+  describe("edge cases and error handling", () => {
+    it("should handle empty particle config", () => {
+      render(<LikeButton particleConfig={{}} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      // Should use defaults
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBeGreaterThan(0)
+    })
+
+    it("should handle partial particle config", () => {
+      render(<LikeButton particleConfig={{ count: 7 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(7)
+    })
+
+    it("should handle zero particle count", () => {
+      render(<LikeButton particleConfig={{ count: 0 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(0)
+    })
+
+    it("should handle single particle", () => {
+      render(<LikeButton particleConfig={{ count: 1 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(1)
+    })
+
+    it("should handle large particle count", () => {
+      render(<LikeButton particleConfig={{ count: 100 }} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(100)
+    })
+
+    it("should handle all shape presets", () => {
+      const shapes = ["heart", "star", "circle", "square", "sparkle"] as const
+
+      shapes.forEach((shape) => {
+        cleanup()
+        render(<LikeButton particleConfig={{ shape }} />)
+
+        const button = screen.getByRole("button")
+        fireEvent.click(button)
+
+        const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+        expect(particles.length).toBeGreaterThan(0)
+      })
+    })
+
+    it("should handle combined preset and config overrides", () => {
+      render(
+        <LikeButton
+          particlePreset="burst"
+          particleConfig={{
+            count: 8,
+            shape: "star",
+            colors: ["#ff0000"],
+            speed: 1500,
+          }}
+        />,
+      )
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      const particles = document.querySelectorAll('[aria-hidden="true"] > div')
+      expect(particles.length).toBe(8)
+    })
+  })
 })

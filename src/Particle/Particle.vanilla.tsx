@@ -1,17 +1,35 @@
-import { useParticle } from "./useParticle";
-import type { ParticleProps } from "./useParticle";
+import { getParticleShape } from "./shapes"
+import type { ParticleProps } from "./useParticle"
+import { useParticle } from "./useParticle"
 
 /**
- * Particle - Animated heart particle for burst effects.
+ * Particle - Animated particle for burst effects.
  * This version uses vanilla CSS (no Tailwind dependency).
+ *
+ * Supports multiple shapes (heart, star, circle, square, sparkle) and custom shapes.
+ * Animation is fully configurable via speed, easing, and fadeOut props.
  */
 export function ParticleVanilla({
   angle,
   distance,
   scale,
   color,
+  shape,
+  speed,
+  easing,
+  fadeOut,
 }: ParticleProps) {
-  const { transform, opacity } = useParticle({ angle, distance, scale });
+  const { transform, opacity } = useParticle({
+    angle,
+    distance,
+    scale,
+    speed,
+    easing,
+    fadeOut,
+  })
+
+  // Get the shape component (preset or custom)
+  const ShapeComponent = getParticleShape(shape)
 
   return (
     <div
@@ -19,15 +37,14 @@ export function ParticleVanilla({
       style={{
         color,
         transform,
-        opacity,
+        opacity: fadeOut ? opacity : 1,
+        transitionDuration: `${speed}ms`,
+        transitionTimingFunction: easing,
       }}
     >
-      <svg viewBox="0 0 24 24" className="particle__icon" aria-hidden="true">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-      </svg>
+      <ShapeComponent size={40} color={color} className="particle__icon" />
     </div>
-  );
+  )
 }
 
-export default ParticleVanilla;
-
+export default ParticleVanilla

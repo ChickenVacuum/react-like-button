@@ -43,6 +43,38 @@ const MAX_FILL_HEIGHT = 85
  *
  * // Minimum fill for custom shapes
  * <LikeButton minFillPercent={15} shape={{ clipPath: "polygon(...)" }} />
+ *
+ * // Particle presets
+ * <LikeButton particlePreset="burst" />
+ * <LikeButton particlePreset="confetti" />
+ * <LikeButton particlePreset="fireworks" />
+ *
+ * // Custom particle configuration
+ * <LikeButton particleConfig={{
+ *   shape: 'star',
+ *   colors: ['#FFD700', '#FFA500'],
+ *   count: 15,
+ *   speed: 800
+ * }} />
+ *
+ * // Combine preset with custom config
+ * <LikeButton
+ *   particlePreset="burst"
+ *   particleConfig={{ count: 20, colors: ['#ff0000'] }}
+ * />
+ *
+ * // Advanced particle configuration
+ * <LikeButton particleConfig={{
+ *   shape: 'sparkle',
+ *   count: 12,
+ *   speed: 600,
+ *   distance: { min: 80, max: 120 },
+ *   spread: 180,
+ *   spreadOffset: -90, // Upward spray
+ *   size: { min: 1.2, max: 2.0 },
+ *   easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+ *   fadeOut: true
+ * }} />
  * ```
  */
 export function LikeButton({
