@@ -18,4 +18,3 @@ export function HeartShape({ size, color, className = "" }: ParticleShapeProps) 
     </svg>
   )
 }
-

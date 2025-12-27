@@ -154,4 +154,3 @@ export const PARTICLE_PRESETS: Record<ParticlePreset, ParticlePresetConfig> = {
 export function getParticlePreset(preset: ParticlePreset): ParticlePresetConfig {
   return PARTICLE_PRESETS[preset]
 }
-

@@ -18,4 +18,3 @@ export function SquareShape({ size, color, className = "" }: ParticleShapeProps)
     </svg>
   )
 }
-

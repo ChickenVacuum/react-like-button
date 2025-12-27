@@ -18,4 +18,3 @@ export function StarShape({ size, color, className = "" }: ParticleShapeProps) {
     </svg>
   )
 }
-
