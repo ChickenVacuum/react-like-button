@@ -9,11 +9,10 @@ An animated like button component with liquid fill effect and customizable parti
 
 ## Features
 
-- 🎨 **Liquid Fill Animation** - Smooth wave effect that fills the button
-- ✨ **Particle Effects** - 5 built-in presets + full customization
-- 🎯 **Multiple Clicks** - Track multiple interactions with configurable max
-- 🔄 **Controlled & Uncontrolled** - Works both ways
-- 🎭 **Custom Shapes** - Circle, rounded, or custom clip-path
+- 🎨 **Liquid Fill Animation** - Smooth wave effect that fills the button (that's why it's called "multi like")
+- ✨ **Particle Effects** - 5 built-in presets + full customization when you click
+- 🎯 **Multiple Clicks** - Track multiple likes with configurable max. You can configure 1 click to fill the like, or multiple ones.
+- 🎭 **Custom Shapes** - Circle, rounded, or custom
 - 🖱️ **Custom Cursors** - Built-in presets (heart, star, thumbs-up) or custom
 - 🎨 **Fully Customizable** - Colors, sizes, styles, and more
 - 📦 **Two Versions** - Tailwind CSS or vanilla CSS
