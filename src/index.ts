@@ -30,5 +30,15 @@ export { LIKE_BUTTON_DEFAULTS, useLikeButton } from "./LikeButton/useLikeButton"
 // Particle components
 export { Particle } from "./Particle/Particle"
 export { ParticleVanilla } from "./Particle/Particle.vanilla"
+// Particle types
+export type {
+  CustomParticleShape,
+  ParticleConfig,
+  ParticlePreset,
+  ParticleShape,
+  ParticleShapePreset,
+  ParticleShapeProps,
+  Range,
+} from "./Particle/types"
 export type { ParticleProps, UseParticleReturn } from "./Particle/useParticle"
 export { useParticle } from "./Particle/useParticle"
