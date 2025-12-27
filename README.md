@@ -1,5 +1,10 @@
 # React Multi Like Button
 
+| Custom hearth with on complete state | Classic button | Like shaped cursor | Gold stars particle |
+|--------|--------|--------|--------|
+| ![Full hearth SVG](docs/header_demos/multi_like_button_hearth_svg.gif) | ![Round with sparks](docs/header_demos/multi_like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/multi_like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/multi_like_button_square_star.gif) |
+
+
 An animated like button component with liquid fill effect and customizable particle animations. Available in both Tailwind CSS and vanilla CSS versions.
 
 ## Features
