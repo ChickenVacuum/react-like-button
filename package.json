@@ -62,7 +62,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChickenVacuum/react-multi-like-button"
+    "url": "git+https://github.com/ChickenVacuum/react-multi-like-button.git"
   },
   "homepage": "https://github.com/ChickenVacuum/react-multi-like-button#readme",
   "bugs": {
