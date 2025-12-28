@@ -1,6 +1,6 @@
 {
   "name": "@jepepa/like-button",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Animated like button with liquid fill and particle effects",
   "type": "module",
   "main": "./dist/index.js",
