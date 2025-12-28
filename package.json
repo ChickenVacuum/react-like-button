@@ -1,6 +1,6 @@
 {
   "name": "@jepepa/like-button",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Animated like button with liquid fill and particle effects",
   "type": "module",
   "main": "./dist/index.js",
@@ -62,11 +62,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChickenVacuum/react-multi-like-button.git"
+    "url": "git+https://github.com/ChickenVacuum/react-like-button.git"
   },
-  "homepage": "https://github.com/ChickenVacuum/react-multi-like-button#readme",
+  "homepage": "https://github.com/ChickenVacuum/react-like-button#readme",
   "bugs": {
-    "url": "https://github.com/ChickenVacuum/react-multi-like-button/issues"
+    "url": "https://github.com/ChickenVacuum/react-like-button/issues"
   },
   "peerDependencies": {
     "react": "^19.0.0",

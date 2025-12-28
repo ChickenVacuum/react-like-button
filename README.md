@@ -1,19 +1,19 @@
-# React Multi Like Button
+# React Like Button
 
 | Custom hearth with on complete state | Classic button | Like shaped cursor | Gold stars particle |
 |--------|--------|--------|--------|
-| ![Full hearth SVG](docs/header_demos/multi_like_button_hearth_svg.gif) | ![Round with sparks](docs/header_demos/multi_like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/multi_like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/multi_like_button_square_star.gif) |
+| ![Full hearth SVG](docs/header_demos/like_button_hearth_svg.gif) | ![Round with sparks](docs/header_demos/like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/like_button_square_star.gif) |
 
 _(The gifs are accelerated and chopped, the effects would render better in real life)_
 
+Test it yourself: [StackBlitz Playground](https://stackblitz.com/edit/react-like-button-component?file=src%2FApp.tsx)
 
 An animated like button component with liquid fill effect and customizable particle animations. Available in both Tailwind CSS and vanilla CSS versions.
 
 ## Features
 
-- 🎨 **Liquid Fill Animation** - Smooth wave effect that fills the button (that's why it's called "multi like")
+- 🎯 **Multi like Fill Animation** - You can click and like multiple times until full (configurable) 
 - ✨ **Particle Effects** - 5 built-in presets + full customization when you click
-- 🎯 **Multiple Clicks** - Track multiple likes with configurable max. You can configure 1 click to fill the like, or multiple ones.
 - 🎭 **Custom Shapes** - Circle, rounded, or custom
 - 🖱️ **Custom Cursors** - Built-in presets (heart, star, thumbs-up) or custom
 - 🎨 **Fully Customizable** - Colors, sizes, styles, and more
@@ -366,8 +366,8 @@ Created by [jepepa](https://github.com/ChickenVacuum)
 
 ## Support
 
-- 🐛 [Report a bug](https://github.com/ChickenVacuum/react-multi-like-button/issues)
-- 💡 [Request a feature](https://github.com/ChickenVacuum/react-multi-like-button/issues)
-- ⭐ [Star on GitHub](https://github.com/ChickenVacuum/react-multi-like-button)
+- 🐛 [Report a bug](https://github.com/ChickenVacuum/react-like-button/issues)
+- 💡 [Request a feature](https://github.com/ChickenVacuum/react-like-button/issues)
+- ⭐ [Star on GitHub](https://github.com/ChickenVacuum/react-like-button)
 
 
