@@ -1,5 +1,10 @@
 # React Like Button
 
+[![npm version](https://img.shields.io/npm/v/@jepepa/react-like-button.svg)](https://www.npmjs.com/package/@jepepa/react-like-button)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@jepepa/react-like-button)](https://bundlephobia.com/package/@jepepa/react-like-button)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 | Custom hearth with on complete state | Classic button | Like shaped cursor | Gold stars particle |
 |--------|--------|--------|--------|
 | ![Full hearth SVG](docs/header_demos/like_button_hearth_svg.gif) | ![Round with sparks](docs/header_demos/like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/like_button_square_star.gif) |
