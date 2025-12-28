@@ -58,10 +58,27 @@ export function useParticle({
 >): UseParticleReturn {
   const [isAnimating, setIsAnimating] = useState(false)
 
-  // Trigger animation after mount
+  // Trigger animation after browser has painted the initial state
+  // Using double RAF ensures the initial state is committed before transitioning
   useEffect(() => {
-    const timer = requestAnimationFrame(() => setIsAnimating(true))
-    return () => cancelAnimationFrame(timer)
+    let cancelled = false
+    let raf2: number | undefined
+
+    // First RAF: scheduled during current frame
+    const raf1 = requestAnimationFrame(() => {
+      // Second RAF: runs after browser has painted
+      raf2 = requestAnimationFrame(() => {
+        if (!cancelled) {
+          setIsAnimating(true)
+        }
+      })
+    })
+
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf1)
+      if (raf2 !== undefined) cancelAnimationFrame(raf2)
+    }
   }, [])
 
   // Calculate final position
@@ -74,7 +91,7 @@ export function useParticle({
     y,
     transform: isAnimating
       ? `translate(${x}px, ${y}px) scale(${scale})`
-      : "translate(0, 0) scale(0)",
+      : "translate(0, 0) scale(1)",
     opacity: isAnimating ? 0 : 1,
     speed,
     easing,

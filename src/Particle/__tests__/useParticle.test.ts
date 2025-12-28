@@ -30,7 +30,7 @@ describe("useParticle", () => {
     it("should have initial transform at origin", () => {
       const { result } = renderHook(() => useParticle(defaultProps))
 
-      expect(result.current.transform).toBe("translate(0, 0) scale(0)")
+      expect(result.current.transform).toBe("translate(0, 0) scale(1)")
     })
 
     it("should have opacity 1 initially", () => {
