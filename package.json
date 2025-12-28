@@ -14,13 +14,14 @@
     "./vanilla": {
       "types": "./dist/vanilla.d.ts",
       "import": "./dist/vanilla.js"
-    }
+    },
+    "./styles.css": "./dist/styles.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && cat src/LikeButton/LikeButton.vanilla.css src/Particle/Particle.vanilla.css > dist/styles.css",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
