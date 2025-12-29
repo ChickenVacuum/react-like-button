@@ -535,10 +535,63 @@ describe("useLikeButton", () => {
       expect(result.current.ariaLabel).toContain("Thank you")
     })
 
-    it("should use custom aria label", () => {
+    it("should use custom aria label string", () => {
       const { result } = renderHook(() => useLikeButton({ ariaLabel: "Custom label" }))
 
       expect(result.current.ariaLabel).toBe("Custom label")
+    })
+
+    it("should support function-based aria label for i18n", () => {
+      const ariaLabelFn = vi.fn(({ remaining }) => `${remaining} likes left`)
+      const { result } = renderHook(() => useLikeButton({ maxClicks: 10, ariaLabel: ariaLabelFn }))
+
+      expect(result.current.ariaLabel).toBe("10 likes left")
+      expect(ariaLabelFn).toHaveBeenCalledWith({
+        isMaxed: false,
+        remaining: 10,
+        localClicks: 0,
+        maxClicks: 10,
+      })
+    })
+
+    it("should update function-based aria label on state change", () => {
+      const ariaLabelFn = ({ isMaxed, remaining }: { isMaxed: boolean; remaining: number }) =>
+        isMaxed ? "Maxed!" : `${remaining} left`
+      const { result } = renderHook(() => useLikeButton({ maxClicks: 2, ariaLabel: ariaLabelFn }))
+
+      expect(result.current.ariaLabel).toBe("2 left")
+
+      act(() => {
+        result.current.handleClick()
+      })
+
+      expect(result.current.ariaLabel).toBe("1 left")
+
+      act(() => {
+        result.current.handleClick()
+      })
+
+      expect(result.current.ariaLabel).toBe("Maxed!")
+    })
+
+    it("should pass all state properties to aria label function", () => {
+      const ariaLabelFn = vi.fn(() => "test")
+      const { result } = renderHook(() => useLikeButton({ maxClicks: 5, ariaLabel: ariaLabelFn }))
+
+      act(() => {
+        result.current.handleClick()
+      })
+
+      act(() => {
+        result.current.handleClick()
+      })
+
+      expect(ariaLabelFn).toHaveBeenLastCalledWith({
+        isMaxed: false,
+        remaining: 3,
+        localClicks: 2,
+        maxClicks: 5,
+      })
     })
   })
 })
