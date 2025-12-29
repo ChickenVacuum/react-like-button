@@ -371,13 +371,30 @@ The particle system is optimized for performance:
 Full TypeScript support with comprehensive type definitions:
 
 ```tsx
+// Most common types
 import type {
-  LikeButtonProps,
-  ParticleConfig,
-  ParticlePreset,
-  ParticleShape,
-  CustomParticleShape,
-  ParticleShapeProps
+  LikeButtonProps,          // Component props
+  IconRenderProps,          // Custom icon render function props
+  ParticleConfig,           // Particle configuration
+  CustomParticleShape,      // Custom particle shape
+} from '@jepepa/like-button';
+
+// Hook types (for headless usage)
+import type {
+  UseLikeButtonOptions,     // Hook options
+  UseLikeButtonReturn,      // Hook return type
+} from '@jepepa/like-button';
+
+// Shape and cursor types
+import type {
+  Shape, ShapePreset, CustomShape,
+  Cursor, CursorPreset, CustomCursor,
+} from '@jepepa/like-button';
+
+// All particle types
+import type {
+  ParticlePreset, ParticleShape, ParticleShapePreset,
+  ParticleShapeProps, Range,
 } from '@jepepa/like-button';
 ```
 
