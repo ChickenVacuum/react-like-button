@@ -15,6 +15,16 @@ import {
 export type { LikeButtonProps }
 
 // Maximum fill height percentage (leaves room for wave animation at top)
+// Static Tailwind class strings extracted to avoid string concatenation on every render
+const BUTTON_BASE_CLASSES =
+  "relative overflow-hidden z-10 border-solid flex items-center justify-center group transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-dark focus-visible:ring-offset-2"
+const WRAPPER_CLASSES = "relative inline-block"
+const FILL_CONTAINER_CLASSES =
+  "absolute bottom-0 left-0 right-0 z-0 transition-[height] duration-500 ease-out"
+const WAVE_CONTAINER_CLASSES = "absolute bottom-full left-0 w-[200%] h-4 flex"
+const WAVE_SVG_CLASSES = "w-1/2 h-full fill-current"
+const PARTICLE_CONTAINER_CLASSES =
+  "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
 const MAX_FILL_HEIGHT = 85
 
 /**
@@ -151,7 +161,7 @@ export function LikeButton({
     )
 
   return (
-    <div className="relative inline-block">
+    <div className={WRAPPER_CLASSES}>
       <button
         id={buttonId}
         data-like-button
@@ -163,11 +173,11 @@ export function LikeButton({
         aria-pressed={isPressed}
         aria-disabled={disabled}
         style={{ ...buttonStyle, ...hoverActiveVars, cursor: cursorStyle }}
-        className={`relative overflow-hidden z-10 border-solid flex items-center justify-center group transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-dark focus-visible:ring-offset-2 ${className}`}
+        className={`${BUTTON_BASE_CLASSES} ${className}`}
       >
         {/* Liquid Fill Container */}
         <div
-          className="absolute bottom-0 left-0 right-0 z-0 transition-[height] duration-500 ease-out"
+          className={FILL_CONTAINER_CLASSES}
           style={{
             backgroundColor: fillColor,
             height: isMaxed
@@ -177,13 +187,13 @@ export function LikeButton({
         >
           {/* Wave 1 (Back Layer) */}
           <div
-            className="absolute bottom-full left-0 w-[200%] h-4 flex"
+            className={WAVE_CONTAINER_CLASSES}
             style={{ animation: "wave-scroll-left 3s linear infinite" }}
           >
             {[0, 1].map((i) => (
               <svg
                 key={i}
-                className="w-1/2 h-full fill-current"
+                className={WAVE_SVG_CLASSES}
                 style={{ color: waveColor }}
                 viewBox="0 0 100 20"
                 preserveAspectRatio="none"
@@ -196,13 +206,13 @@ export function LikeButton({
 
           {/* Wave 2 (Front Layer) */}
           <div
-            className="absolute bottom-full left-0 w-[200%] h-4 flex"
+            className={WAVE_CONTAINER_CLASSES}
             style={{ animation: "wave-scroll-right 1.5s linear infinite" }}
           >
             {[0, 1].map((i) => (
               <svg
                 key={i}
-                className="w-1/2 h-full fill-current"
+                className={WAVE_SVG_CLASSES}
                 style={{ color: fillColor }}
                 viewBox="0 0 100 20"
                 preserveAspectRatio="none"
@@ -220,10 +230,7 @@ export function LikeButton({
 
       {/* Particles */}
       {showParticles && (
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-          aria-hidden="true"
-        >
+        <div className={PARTICLE_CONTAINER_CLASSES} aria-hidden="true">
           {particles.map((p) => (
             <Particle key={p.id} {...p} />
           ))}
