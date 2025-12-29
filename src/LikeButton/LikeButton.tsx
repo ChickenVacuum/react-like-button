@@ -5,9 +5,9 @@ import type { LikeButtonProps } from "./types"
 import { LIKE_BUTTON_DEFAULTS, useLikeButton } from "./useLikeButton"
 import {
   computeButtonStyles,
+  computeHoverActiveVars,
   computeHoverOffset,
   DEFAULT_STYLES,
-  generateDynamicStyles,
   getCursorStyle,
   getShapeStyles,
 } from "./utils"
@@ -122,19 +122,10 @@ export function LikeButton({
     [mergedStyles.shadowOffset],
   )
 
-  const dynamicStyles = useMemo(
-    () => `
-      @keyframes wave-scroll-left {
-        from { transform: translateX(0); }
-        to { transform: translateX(-50%); }
-      }
-      @keyframes wave-scroll-right {
-        from { transform: translateX(-50%); }
-        to { transform: translateX(0); }
-      }
-      ${generateDynamicStyles(`#${buttonId}`, hoverShadowOffset, mergedStyles)}
-    `,
-    [buttonId, hoverShadowOffset, mergedStyles],
+  // CSS custom properties for hover/active states (no <style> tag needed)
+  const hoverActiveVars = useMemo(
+    () => computeHoverActiveVars(hoverShadowOffset, mergedStyles),
+    [hoverShadowOffset, mergedStyles],
   )
 
   // Cursor style (not-allowed when disabled)
@@ -161,11 +152,9 @@ export function LikeButton({
 
   return (
     <div className="relative inline-block">
-      {/* Dynamic styles for hover/active states */}
-      <style>{dynamicStyles}</style>
-
       <button
         id={buttonId}
+        data-like-button
         type="button"
         onClick={handleClick}
         onContextMenu={handleRightClick}
@@ -173,7 +162,7 @@ export function LikeButton({
         aria-label={ariaLabel}
         aria-pressed={isPressed}
         aria-disabled={disabled}
-        style={{ ...buttonStyle, cursor: cursorStyle }}
+        style={{ ...buttonStyle, ...hoverActiveVars, cursor: cursorStyle }}
         className={`relative overflow-hidden z-10 border-solid flex items-center justify-center group transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-dark focus-visible:ring-offset-2 ${className}`}
       >
         {/* Liquid Fill Container */}

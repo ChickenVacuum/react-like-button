@@ -67,26 +67,29 @@ export function computeButtonStyles(
 }
 
 /**
- * Generate dynamic CSS for hover/active states.
- * Uses :not(:disabled) to prevent animations on disabled buttons.
+ * Generate CSS custom properties for hover/active states.
+ * These are set as inline styles on the button element.
+ *
+ * The static CSS rules in LikeButton.vanilla.css (or Tailwind's hover: classes)
+ * reference these custom properties for the actual hover/active styling.
+ *
+ * This approach:
+ * - Eliminates inline <style> tag injection (better for CSP)
+ * - Reduces DOM pollution (no duplicate keyframe definitions)
+ * - Works with both Tailwind and vanilla CSS versions
  */
-export function generateDynamicStyles(
-  buttonSelector: string,
+export function computeHoverActiveVars(
   hoverShadowOffset: number,
   mergedStyles: Required<StyleOverrides>,
-): string {
+): React.CSSProperties {
   const translateOnHover = mergedStyles.shadowOffset - hoverShadowOffset
 
-  return `
-    ${buttonSelector}:hover:not(:disabled) {
-      box-shadow: ${hoverShadowOffset}px ${hoverShadowOffset}px 0px ${mergedStyles.shadowColor};
-      transform: translate(${translateOnHover}px, ${translateOnHover}px);
-    }
-    ${buttonSelector}:active:not(:disabled) {
-      box-shadow: none;
-      transform: translate(${mergedStyles.shadowOffset}px, ${mergedStyles.shadowOffset}px) scale(0.9);
-    }
-  `
+  return {
+    "--shadow-offset": `${mergedStyles.shadowOffset}px`,
+    "--shadow-color": mergedStyles.shadowColor,
+    "--hover-shadow-offset": `${hoverShadowOffset}px`,
+    "--translate-hover": `${translateOnHover}px`,
+  } as React.CSSProperties
 }
 
 // ============================================
