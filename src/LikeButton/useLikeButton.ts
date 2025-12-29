@@ -76,7 +76,11 @@ export interface UseLikeButtonOptions {
   ) => void
   /** Whether the button is disabled */
   disabled?: boolean
-  /** Show particle effects on click */
+  /**
+   * Show particle effects on click.
+   * When false, no particles are spawned or rendered.
+   * @default true
+   */
   showParticles?: boolean
   /**
    * Custom aria-label override. Accepts either a static string or a function
