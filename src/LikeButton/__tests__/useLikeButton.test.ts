@@ -378,6 +378,64 @@ describe("useLikeButton", () => {
     })
   })
 
+  describe("defaultClicks (uncontrolled mode)", () => {
+    it("should initialize with defaultClicks value", () => {
+      const { result } = renderHook(() => useLikeButton({ defaultClicks: 5, maxClicks: 10 }))
+
+      expect(result.current.clicks).toBe(5)
+      expect(result.current.fillPercentage).toBe(50)
+    })
+
+    it("should increment from defaultClicks on click", () => {
+      const { result } = renderHook(() => useLikeButton({ defaultClicks: 3, maxClicks: 10 }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(result.current.clicks).toBe(4)
+    })
+
+    it("should be maxed when defaultClicks equals maxClicks", () => {
+      const { result } = renderHook(() => useLikeButton({ defaultClicks: 10, maxClicks: 10 }))
+
+      expect(result.current.isMaxed).toBe(true)
+      expect(result.current.disabled).toBe(true)
+    })
+
+    it("should set isPressed to true when defaultClicks > 0", () => {
+      const { result } = renderHook(() => useLikeButton({ defaultClicks: 1 }))
+
+      expect(result.current.isPressed).toBe(true)
+    })
+
+    it("should ignore defaultClicks when clicks is provided (controlled mode)", () => {
+      const { result } = renderHook(() =>
+        useLikeButton({ clicks: 2, defaultClicks: 5, maxClicks: 10 }),
+      )
+
+      expect(result.current.clicks).toBe(2)
+    })
+
+    it("should warn in dev when both clicks and defaultClicks are provided", () => {
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
+
+      renderHook(() => useLikeButton({ clicks: 2, defaultClicks: 5 }))
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        "LikeButton: `defaultClicks` is ignored when `clicks` is provided (controlled mode).",
+      )
+
+      warnSpy.mockRestore()
+    })
+
+    it("should default to 0 when defaultClicks is not provided", () => {
+      const { result } = renderHook(() => useLikeButton())
+
+      expect(result.current.clicks).toBe(0)
+    })
+  })
+
   describe("disabled state", () => {
     it("should respect external disabled prop", () => {
       const { result } = renderHook(() => useLikeButton({ disabled: true }))
