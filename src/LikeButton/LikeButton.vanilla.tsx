@@ -88,12 +88,14 @@ export function LikeButtonVanilla({
   const {
     handleClick,
     handleRightClick,
+    handleKeyDown,
     disabled,
     ariaLabel,
     isPressed,
     isMaxed,
     fillPercentage,
     particles,
+    hasRightClickAction,
   } = useLikeButton({ showParticles, ...hookOptions })
 
   // Memoize style computations
@@ -146,10 +148,12 @@ export function LikeButtonVanilla({
         type="button"
         onClick={handleClick}
         onContextMenu={handleRightClick}
+        onKeyDown={handleKeyDown}
         disabled={disabled}
         aria-label={ariaLabel}
         aria-pressed={isPressed}
         aria-disabled={disabled}
+        aria-keyshortcuts={hasRightClickAction ? "Shift+Enter" : undefined}
         style={{ ...buttonStyle, ...hoverActiveVars, cursor: cursorStyle }}
         className={`like-button ${className}`.trim()}
       >
