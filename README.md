@@ -144,8 +144,8 @@ Start with a preset and override specific properties:
 ```tsx
 const [clicks, setClicks] = useState(0);
 
-<LikeButton 
-  localClicks={clicks}
+<LikeButton
+  clicks={clicks}
   onClick={(newClicks) => setClicks(newClicks)}
   maxClicks={5}
 />
@@ -270,7 +270,7 @@ const customDiamond: CustomParticleShape = {
 | `fillColor` | `string` | `"#EF4444"` | Fill color (hex or CSS color) |
 | `waveColor` | `string` | `fillColor` | Wave color (defaults to fillColor) |
 | `maxClicks` | `number` | `Infinity` | Maximum number of clicks allowed |
-| `localClicks` | `number` | - | Controlled mode: current click count |
+| `clicks` | `number` | - | Controlled mode: current click count |
 | `onClick` | `(clicks: number) => void` | - | Click handler |
 | `onRightClick` | `(clicks: number) => void` | - | Right-click handler |
 | `shape` | `ShapePreset \| CustomShape` | `"heart"` | Button shape |
@@ -359,6 +359,25 @@ import type {
 ```
 
 ## Changelog
+
+### v0.9.3 (Breaking Change)
+
+**⚠️ Breaking Change: Renamed `localClicks` to `clicks`**
+
+The `localClicks` prop has been renamed to `clicks` for clarity:
+
+```tsx
+// Before
+<LikeButton localClicks={clicks} onClick={(n) => setClicks(n)} />
+
+// After
+<LikeButton clicks={clicks} onClick={(n) => setClicks(n)} />
+```
+
+This also affects the `useLikeButton` hook:
+- Option: `localClicks` → `clicks`
+- Return value: `localClicks` → `clicks`
+- `AriaLabelState.localClicks` → `AriaLabelState.clicks`
 
 ### v0.9.0 (Breaking Change)
 

@@ -337,9 +337,9 @@ describe("LikeButton", () => {
   })
 
   describe("controlled mode", () => {
-    it("should use external localClicks value", () => {
+    it("should use external clicks value", () => {
       const onClick = vi.fn()
-      render(<LikeButton localClicks={5} maxClicks={10} onClick={onClick} />)
+      render(<LikeButton clicks={5} maxClicks={10} onClick={onClick} />)
 
       const button = screen.getByRole("button")
       fireEvent.click(button)
@@ -348,8 +348,8 @@ describe("LikeButton", () => {
       expect(onClick).toHaveBeenCalledWith(6, expect.any(Object))
     })
 
-    it("should be disabled when external localClicks equals maxClicks", () => {
-      render(<LikeButton localClicks={10} maxClicks={10} />)
+    it("should be disabled when external clicks equals maxClicks", () => {
+      render(<LikeButton clicks={10} maxClicks={10} />)
 
       const button = screen.getByRole("button")
       expect(button).toBeDisabled()
@@ -489,7 +489,7 @@ describe("LikeButton", () => {
     })
 
     it("should scale correctly with clicks", () => {
-      render(<LikeButton minFillPercent={10} localClicks={5} maxClicks={10} />)
+      render(<LikeButton minFillPercent={10} clicks={5} maxClicks={10} />)
 
       const button = screen.getByRole("button")
       const fill = button.querySelector(".absolute.bottom-0")
@@ -499,7 +499,7 @@ describe("LikeButton", () => {
     })
 
     it("should reach max fill height at 100% fill (not maxed)", () => {
-      render(<LikeButton minFillPercent={10} localClicks={10} maxClicks={20} />)
+      render(<LikeButton minFillPercent={10} clicks={10} maxClicks={20} />)
 
       const button = screen.getByRole("button")
       const fill = button.querySelector(".absolute.bottom-0")
@@ -509,12 +509,12 @@ describe("LikeButton", () => {
     })
 
     it("should reach 85% at 100% fill when not maxed", () => {
-      render(<LikeButton minFillPercent={10} localClicks={14} maxClicks={14} />)
+      render(<LikeButton minFillPercent={10} clicks={14} maxClicks={14} />)
 
       const button = screen.getByRole("button")
       const fill = button.querySelector(".absolute.bottom-0")
 
-      // When maxed (localClicks === maxClicks), should be 100%
+      // When maxed (clicks === maxClicks), should be 100%
       expect(fill).toHaveStyle({ height: "100%" })
     })
 
@@ -548,7 +548,7 @@ describe("LikeButton", () => {
     })
 
     it("should show 100% height when maxed regardless of minFillPercent", () => {
-      render(<LikeButton minFillPercent={20} localClicks={10} maxClicks={10} />)
+      render(<LikeButton minFillPercent={20} clicks={10} maxClicks={10} />)
 
       const button = screen.getByRole("button")
       const fill = button.querySelector(".absolute.bottom-0")

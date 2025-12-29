@@ -12,7 +12,7 @@ describe("useLikeButton", () => {
     it("should start with 0 clicks", () => {
       const { result } = renderHook(() => useLikeButton())
 
-      expect(result.current.localClicks).toBe(0)
+      expect(result.current.clicks).toBe(0)
     })
 
     it("should not be maxed initially", () => {
@@ -54,7 +54,7 @@ describe("useLikeButton", () => {
         result.current.handleClick(createMockMouseEvent())
       })
 
-      expect(result.current.localClicks).toBe(1)
+      expect(result.current.clicks).toBe(1)
     })
 
     it("should call onClick with new click count and event", () => {
@@ -121,7 +121,7 @@ describe("useLikeButton", () => {
         result.current.handleRightClick(mockEvent)
       })
 
-      expect(result.current.localClicks).toBe(0)
+      expect(result.current.clicks).toBe(0)
       expect(onRightClick).toHaveBeenCalledTimes(2)
     })
 
@@ -284,32 +284,32 @@ describe("useLikeButton", () => {
       })
 
       expect(onClick).toHaveBeenCalledTimes(2)
-      expect(result.current.localClicks).toBe(2)
+      expect(result.current.clicks).toBe(2)
     })
   })
 
   describe("controlled mode", () => {
-    it("should use external localClicks value", () => {
-      const { result } = renderHook(() => useLikeButton({ localClicks: 5 }))
+    it("should use external clicks value", () => {
+      const { result } = renderHook(() => useLikeButton({ clicks: 5 }))
 
-      expect(result.current.localClicks).toBe(5)
+      expect(result.current.clicks).toBe(5)
     })
 
     it("should calculate fillPercentage from external value", () => {
-      const { result } = renderHook(() => useLikeButton({ localClicks: 5, maxClicks: 10 }))
+      const { result } = renderHook(() => useLikeButton({ clicks: 5, maxClicks: 10 }))
 
       expect(result.current.fillPercentage).toBe(50)
     })
 
     it("should be maxed when external value equals maxClicks", () => {
-      const { result } = renderHook(() => useLikeButton({ localClicks: 10, maxClicks: 10 }))
+      const { result } = renderHook(() => useLikeButton({ clicks: 10, maxClicks: 10 }))
 
       expect(result.current.isMaxed).toBe(true)
     })
 
     it("should call onClick with incremented external value and event", () => {
       const onClick = vi.fn()
-      const { result } = renderHook(() => useLikeButton({ localClicks: 5, maxClicks: 10, onClick }))
+      const { result } = renderHook(() => useLikeButton({ clicks: 5, maxClicks: 10, onClick }))
 
       const mockEvent = {} as React.MouseEvent<HTMLButtonElement>
 
@@ -564,7 +564,7 @@ describe("useLikeButton", () => {
       expect(ariaLabelFn).toHaveBeenCalledWith({
         isMaxed: false,
         remaining: 10,
-        localClicks: 0,
+        clicks: 0,
         maxClicks: 10,
       })
     })
@@ -604,7 +604,7 @@ describe("useLikeButton", () => {
       expect(ariaLabelFn).toHaveBeenLastCalledWith({
         isMaxed: false,
         remaining: 3,
-        localClicks: 2,
+        clicks: 2,
         maxClicks: 5,
       })
     })
@@ -697,18 +697,18 @@ describe("useLikeButton", () => {
       expect(onClick).not.toHaveBeenCalled()
     })
 
-    it("should handle localClicks exceeding maxClicks in controlled mode", () => {
-      const { result } = renderHook(() => useLikeButton({ localClicks: 15, maxClicks: 10 }))
+    it("should handle clicks exceeding maxClicks in controlled mode", () => {
+      const { result } = renderHook(() => useLikeButton({ clicks: 15, maxClicks: 10 }))
 
       expect(result.current.isMaxed).toBe(true)
       expect(result.current.disabled).toBe(true)
       expect(result.current.fillPercentage).toBe(150) // 15/10 * 100
     })
 
-    it("should handle negative localClicks in controlled mode", () => {
-      const { result } = renderHook(() => useLikeButton({ localClicks: -5, maxClicks: 10 }))
+    it("should handle negative clicks in controlled mode", () => {
+      const { result } = renderHook(() => useLikeButton({ clicks: -5, maxClicks: 10 }))
 
-      expect(result.current.localClicks).toBe(-5)
+      expect(result.current.clicks).toBe(-5)
       expect(result.current.isMaxed).toBe(false)
       expect(result.current.fillPercentage).toBe(-50)
     })
@@ -720,7 +720,7 @@ describe("useLikeButton", () => {
         result.current.handleClick(createMockMouseEvent())
       })
 
-      expect(result.current.localClicks).toBe(1)
+      expect(result.current.clicks).toBe(1)
       expect(result.current.fillPercentage).toBeCloseTo(0.0001)
       expect(result.current.isMaxed).toBe(false)
     })
@@ -786,7 +786,7 @@ describe("useLikeButton", () => {
       }
 
       expect(result.current.isMaxed).toBe(false)
-      expect(result.current.localClicks).toBe(5)
+      expect(result.current.clicks).toBe(5)
 
       // Change maxClicks to 5
       rerender({ maxClicks: 5 })
@@ -808,18 +808,18 @@ describe("useLikeButton", () => {
       expect(result.current.disabled).toBe(true)
     })
 
-    it("should reflect external localClicks changes in controlled mode", () => {
+    it("should reflect external clicks changes in controlled mode", () => {
       const { result, rerender } = renderHook(
-        ({ localClicks }) => useLikeButton({ localClicks, maxClicks: 10 }),
-        { initialProps: { localClicks: 0 } },
+        ({ clicks }) => useLikeButton({ clicks, maxClicks: 10 }),
+        { initialProps: { clicks: 0 } },
       )
 
-      expect(result.current.localClicks).toBe(0)
+      expect(result.current.clicks).toBe(0)
       expect(result.current.fillPercentage).toBe(0)
 
-      rerender({ localClicks: 7 })
+      rerender({ clicks: 7 })
 
-      expect(result.current.localClicks).toBe(7)
+      expect(result.current.clicks).toBe(7)
       expect(result.current.fillPercentage).toBe(70)
     })
   })

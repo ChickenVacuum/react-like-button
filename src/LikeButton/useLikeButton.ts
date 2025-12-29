@@ -31,7 +31,7 @@ export interface AriaLabelState {
   /** Number of clicks remaining before max */
   remaining: number
   /** Current number of clicks by the user */
-  localClicks: number
+  clicks: number
   /** Maximum number of clicks allowed */
   maxClicks: number
 }
@@ -56,8 +56,8 @@ export type AriaLabelProp = string | ((state: AriaLabelState) => string)
 
 /** Options for the useLikeButton hook */
 export interface UseLikeButtonOptions {
-  /** Number of clicks by current user (controlled mode). If not provided, internal state is used. */
-  localClicks?: number
+  /** Current click count (controlled mode). If not provided, internal state is used. */
+  clicks?: number
   /** Maximum number of clicks allowed per user */
   maxClicks?: number
   /**
@@ -137,7 +137,7 @@ export const LIKE_BUTTON_DEFAULTS = {
 /** Return type for the useLikeButton hook */
 export interface UseLikeButtonReturn {
   /** Current click count */
-  localClicks: number
+  clicks: number
   /** Whether max clicks reached */
   isMaxed: boolean
   /** Whether button is disabled */
@@ -169,10 +169,10 @@ export interface UseLikeButtonReturn {
  *
  * @example
  * ```tsx
- * const { handleClick, localClicks, particles, ariaLabel } = useLikeButton({
+ * const { handleClick, clicks, particles, ariaLabel } = useLikeButton({
  *   maxClicks: 10,
- *   onClick: (clicks, event) => {
- *     console.log('Clicked!', clicks)
+ *   onClick: (count, event) => {
+ *     console.log('Clicked!', count)
  *     // Access event if needed
  *     event.stopPropagation()
  *   },
@@ -181,7 +181,7 @@ export interface UseLikeButtonReturn {
  */
 export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButtonReturn {
   const {
-    localClicks: externalLocalClicks,
+    clicks: externalClicks,
     maxClicks = LIKE_BUTTON_DEFAULTS.maxClicks,
     onClick,
     onRightClick,
@@ -193,7 +193,7 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
   } = options
 
   // Internal state for uncontrolled mode
-  const [internalLocalClicks, setInternalLocalClicks] = useState(0)
+  const [internalClicks, setInternalClicks] = useState(0)
   const [particles, setParticles] = useState<ParticleData[]>([])
 
   // Track active timeout IDs for cleanup on unmount
@@ -210,8 +210,8 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
   }, [])
 
   // Use external state if provided, otherwise use internal
-  const localClicks = externalLocalClicks ?? internalLocalClicks
-  const isMaxed = localClicks >= maxClicks
+  const clicks = externalClicks ?? internalClicks
+  const isMaxed = clicks >= maxClicks
   const disabled = externalDisabled ?? isMaxed
 
   const spawnParticles = useCallback(() => {
@@ -258,17 +258,17 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     (e: React.MouseEvent<HTMLButtonElement>) => {
       if (disabled) return
 
-      const newLocalClicks = localClicks + 1
+      const newClicks = clicks + 1
 
       // Update internal state if in uncontrolled mode
-      if (externalLocalClicks === undefined) {
-        setInternalLocalClicks(newLocalClicks)
+      if (externalClicks === undefined) {
+        setInternalClicks(newClicks)
       }
 
       spawnParticles()
-      onClick?.(newLocalClicks, e)
+      onClick?.(newClicks, e)
     },
-    [disabled, localClicks, externalLocalClicks, spawnParticles, onClick],
+    [disabled, clicks, externalClicks, spawnParticles, onClick],
   )
 
   const handleRightClick = useCallback(
@@ -278,9 +278,9 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
 
       // Right-click does not increment clicks or spawn particles
       // It only calls the callback with the current click count
-      onRightClick?.(localClicks, e)
+      onRightClick?.(clicks, e)
     },
-    [disabled, localClicks, onRightClick],
+    [disabled, clicks, onRightClick],
   )
 
   /**
@@ -292,23 +292,23 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
       if (e.shiftKey && e.key === "Enter") {
         e.preventDefault()
         if (disabled) return
-        onRightClick?.(localClicks, e)
+        onRightClick?.(clicks, e)
       }
     },
-    [disabled, localClicks, onRightClick],
+    [disabled, clicks, onRightClick],
   )
 
-  const fillPercentage = (localClicks / maxClicks) * 100
+  const fillPercentage = (clicks / maxClicks) * 100
 
   const defaultAriaLabel = isMaxed
     ? "Thank you for your likes!"
-    : `Like this content. ${maxClicks - localClicks} clicks remaining`
+    : `Like this content. ${maxClicks - clicks} clicks remaining`
 
   // Compute aria label - support both static string and dynamic function
   const ariaLabelState: AriaLabelState = {
     isMaxed,
-    remaining: maxClicks - localClicks,
-    localClicks,
+    remaining: maxClicks - clicks,
+    clicks,
     maxClicks,
   }
 
@@ -320,7 +320,7 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
         : customAriaLabel
 
   return {
-    localClicks,
+    clicks,
     isMaxed,
     disabled,
     fillPercentage,
@@ -329,7 +329,7 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     handleRightClick,
     handleKeyDown,
     ariaLabel: computedAriaLabel,
-    isPressed: localClicks > 0,
+    isPressed: clicks > 0,
     hasRightClickAction: onRightClick !== undefined,
   }
 }
