@@ -134,7 +134,7 @@ describe("LikeButton", () => {
 
     it("should increment clicks on each click", () => {
       const onClick = vi.fn()
-      render(<LikeButton onClick={onClick} />)
+      render(<LikeButton onClick={onClick} maxClicks={5} />)
 
       const button = screen.getByRole("button")
       fireEvent.click(button)
@@ -182,7 +182,7 @@ describe("LikeButton", () => {
     it("should not increment clicks on right-click", () => {
       const onClick = vi.fn()
       const onRightClick = vi.fn()
-      render(<LikeButton onClick={onClick} onRightClick={onRightClick} />)
+      render(<LikeButton onClick={onClick} onRightClick={onRightClick} maxClicks={5} />)
 
       const button = screen.getByRole("button")
       fireEvent.contextMenu(button)
@@ -260,7 +260,7 @@ describe("LikeButton", () => {
 
     it("should use current click count when Shift+Enter is pressed", () => {
       const onRightClick = vi.fn()
-      render(<LikeButton onRightClick={onRightClick} />)
+      render(<LikeButton onRightClick={onRightClick} maxClicks={5} />)
 
       const button = screen.getByRole("button")
 

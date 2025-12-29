@@ -304,7 +304,7 @@ describe("useLikeButton", () => {
 
     it("should call onClick with incremented external value and event", () => {
       const onClick = vi.fn()
-      const { result } = renderHook(() => useLikeButton({ localClicks: 5, onClick }))
+      const { result } = renderHook(() => useLikeButton({ localClicks: 5, maxClicks: 10, onClick }))
 
       const mockEvent = {} as React.MouseEvent<HTMLButtonElement>
 
