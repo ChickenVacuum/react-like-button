@@ -6,6 +6,7 @@ import {
   randomInRange,
   resolveParticleConfig,
 } from "../Particle/utils"
+import { PARTICLE_CLEANUP_BUFFER_MS } from "./utils"
 
 /** Data structure for a single particle effect */
 export interface ParticleData {
@@ -241,7 +242,7 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
 
     // Cleanup particles after animation completes
     // Add buffer time to ensure animation finishes
-    const cleanupDelay = config.speed + 100
+    const cleanupDelay = config.speed + PARTICLE_CLEANUP_BUFFER_MS
     // Use Set for O(1) lookup instead of O(n) find() - avoids O(n²) filter
     const idsToRemove = new Set(newParticles.map((p) => p.id))
     const timeoutId = setTimeout(() => {

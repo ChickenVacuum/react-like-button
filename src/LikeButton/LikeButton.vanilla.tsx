@@ -10,6 +10,7 @@ import {
   DEFAULT_STYLES,
   getCursorStyle,
   getShapeStyles,
+  ICON_SIZE_RATIO,
   MAX_FILL_HEIGHT,
 } from "./utils"
 
@@ -128,7 +129,7 @@ export const LikeButtonVanilla = forwardRef<HTMLButtonElement, LikeButtonVanilla
     )
 
     // Icon configuration
-    const iconSize = size * 0.5
+    const iconSize = size * ICON_SIZE_RATIO
     const iconRenderProps: IconRenderProps = {
       size: iconSize,
       className: "like-button__icon",
