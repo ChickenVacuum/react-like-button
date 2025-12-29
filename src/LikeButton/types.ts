@@ -123,7 +123,7 @@ export interface BaseLikeButtonProps extends UseLikeButtonOptions {
 }
 
 /** Props for the LikeButton component (Tailwind version) */
-export interface LikeButtonProps extends BaseLikeButtonProps {}
+export type LikeButtonProps = BaseLikeButtonProps
 
 /** Props for the LikeButton component (Vanilla CSS version) */
-export interface LikeButtonVanillaProps extends BaseLikeButtonProps {}
+export type LikeButtonVanillaProps = BaseLikeButtonProps
