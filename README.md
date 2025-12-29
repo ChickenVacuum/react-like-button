@@ -298,6 +298,7 @@ const customDiamond: CustomParticleShape = {
 | `styles` | `StyleOverrides` | - | Custom style overrides |
 | `renderIcon` | `(props) => ReactNode` | - | Custom icon renderer |
 | `minFillPercent` | `number` | `5` | Minimum fill percentage |
+| `showParticles` | `boolean` | `true` | Enable/disable particle effects |
 | `particlePreset` | `ParticlePreset` | - | Particle effect preset |
 | `particleConfig` | `ParticleConfig` | - | Custom particle configuration |
 
@@ -318,11 +319,13 @@ const customDiamond: CustomParticleShape = {
 
 ### ParticlePreset
 
-- `'burst'` - Quick explosion of hearts (12 particles)
-- `'fountain'` - Upward spray effect (10 particles)
-- `'confetti'` - Colorful celebration (15 particles)
-- `'gentle'` - Subtle floating effect (6 particles)
-- `'fireworks'` - Explosive sparkles (16 particles)
+| Preset | Shape | Count | Description |
+|--------|-------|-------|-------------|
+| `'burst'` | ❤️ heart | 12 | Quick explosion in all directions |
+| `'fountain'` | ⚫ circle | 10 | Upward spray effect |
+| `'confetti'` | ◼️ square | 15 | Colorful celebration |
+| `'gentle'` | ❤️ heart | 6 | Subtle floating effect |
+| `'fireworks'` | ✨ sparkle | 16 | Explosive sparkles |
 
 ### ParticleShape
 
