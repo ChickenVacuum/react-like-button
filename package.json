@@ -1,6 +1,6 @@
 {
   "name": "@jepepa/react-like-button",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Animated React like button component with liquid fill effect, particle animations, and customizable shapes. Supports Tailwind CSS and vanilla CSS. TypeScript-ready, accessible, and headless.",
   "type": "module",
   "main": "./dist/index.cjs",
