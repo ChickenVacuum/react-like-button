@@ -144,9 +144,20 @@ Start with a preset and override specific properties:
 ```tsx
 const [clicks, setClicks] = useState(0);
 
+// Using onChange (simpler, ideal for state setters)
 <LikeButton
   clicks={clicks}
-  onClick={(newClicks) => setClicks(newClicks)}
+  onChange={setClicks}
+  maxClicks={5}
+/>
+
+// Using onClick (when you need the event)
+<LikeButton
+  clicks={clicks}
+  onClick={(newClicks, event) => {
+    setClicks(newClicks);
+    event.stopPropagation();
+  }}
   maxClicks={5}
 />
 ```
@@ -271,8 +282,9 @@ const customDiamond: CustomParticleShape = {
 | `waveColor` | `string` | `fillColor` | Wave color (defaults to fillColor) |
 | `maxClicks` | `number` | `Infinity` | Maximum number of clicks allowed |
 | `clicks` | `number` | - | Controlled mode: current click count |
-| `onClick` | `(clicks: number) => void` | - | Click handler |
-| `onRightClick` | `(clicks: number) => void` | - | Right-click handler |
+| `onChange` | `(clicks: number) => void` | - | Called with new count (ideal for `setClicks`) |
+| `onClick` | `(clicks: number, event) => void` | - | Click handler with event access |
+| `onRightClick` | `(clicks: number, event) => void` | - | Right-click handler |
 | `shape` | `ShapePreset \| CustomShape` | `"heart"` | Button shape |
 | `cursor` | `CursorPreset \| CustomCursor` | `"heart"` | Cursor style |
 | `styles` | `StyleOverrides` | - | Custom style overrides |
