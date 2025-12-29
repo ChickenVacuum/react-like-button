@@ -1,5 +1,11 @@
 import type { Cursor, CursorPreset, Shape, StyleOverrides } from "./types"
 
+/**
+ * Maximum fill height percentage.
+ * Leaves room for wave animation at top (15% reserved for wave visual).
+ */
+export const MAX_FILL_HEIGHT = 85
+
 /** Default style values for brutalist design */
 export const DEFAULT_STYLES: Required<StyleOverrides> = {
   borderWidth: 4,

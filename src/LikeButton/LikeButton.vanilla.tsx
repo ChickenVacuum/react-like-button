@@ -10,12 +10,10 @@ import {
   DEFAULT_STYLES,
   getCursorStyle,
   getShapeStyles,
+  MAX_FILL_HEIGHT,
 } from "./utils"
 
 export type { LikeButtonVanillaProps }
-
-// Maximum fill height percentage (leaves room for wave animation at top)
-const MAX_FILL_HEIGHT = 85
 
 /**
  * LikeButton - Animated like button with liquid fill and particle effects.
