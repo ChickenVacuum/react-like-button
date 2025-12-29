@@ -5,9 +5,9 @@ import type { IconRenderProps, LikeButtonVanillaProps } from "./types"
 import { LIKE_BUTTON_DEFAULTS, useLikeButton } from "./useLikeButton"
 import {
   computeButtonStyles,
+  computeHoverActiveVars,
   computeHoverOffset,
   DEFAULT_STYLES,
-  generateDynamicStyles,
   getCursorStyle,
   getShapeStyles,
 } from "./utils"
@@ -111,9 +111,10 @@ export function LikeButtonVanilla({
     [mergedStyles.shadowOffset],
   )
 
-  const dynamicStyles = useMemo(
-    () => generateDynamicStyles(`#${buttonId}`, hoverShadowOffset, mergedStyles),
-    [buttonId, hoverShadowOffset, mergedStyles],
+  // CSS custom properties for hover/active states (no <style> tag needed)
+  const hoverActiveVars = useMemo(
+    () => computeHoverActiveVars(hoverShadowOffset, mergedStyles),
+    [hoverShadowOffset, mergedStyles],
   )
 
   // Cursor style (not-allowed when disabled)
@@ -140,9 +141,6 @@ export function LikeButtonVanilla({
 
   return (
     <div className="like-button-container">
-      {/* Dynamic styles for hover/active states */}
-      <style>{dynamicStyles}</style>
-
       <button
         id={buttonId}
         type="button"
@@ -152,7 +150,7 @@ export function LikeButtonVanilla({
         aria-label={ariaLabel}
         aria-pressed={isPressed}
         aria-disabled={disabled}
-        style={{ ...buttonStyle, cursor: cursorStyle }}
+        style={{ ...buttonStyle, ...hoverActiveVars, cursor: cursorStyle }}
         className={`like-button ${className}`.trim()}
       >
         {/* Liquid Fill Container */}

@@ -43,10 +43,11 @@ pnpm add @jepepa/like-button
 
 ```tsx
 import { LikeButton } from '@jepepa/like-button';
+import '@jepepa/like-button/like-button.css'; // Required for animations
 
 function App() {
   return (
-    <LikeButton 
+    <LikeButton
       onClick={(clicks) => console.log('Total clicks:', clicks)}
       particlePreset="burst"
     />
@@ -356,6 +357,26 @@ import type {
   ParticleShapeProps
 } from '@jepepa/like-button';
 ```
+
+## Changelog
+
+### v0.9.0 (Breaking Change)
+
+**⚠️ Breaking Change for Tailwind Users**
+
+The Tailwind CSS version now requires importing a CSS file for animations and hover effects to work:
+
+```tsx
+import { LikeButton } from '@jepepa/like-button';
+import '@jepepa/like-button/like-button.css'; // NEW - Required
+```
+
+**What changed:**
+- Removed inline `<style>` tag injection for better performance and CSP compliance
+- Wave animations and hover/active states are now defined in an external CSS file
+- CSS custom properties are used for dynamic styling
+
+**Vanilla CSS users** are not affected - continue importing `@jepepa/like-button/styles.css` as before.
 
 ## Contributing
 

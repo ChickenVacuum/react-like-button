@@ -68,6 +68,24 @@
 }
 
 /* ============================================
+   Hover State (uses CSS custom properties)
+   ============================================ */
+
+.like-button:hover:not(:disabled) {
+  box-shadow: var(--hover-shadow-offset) var(--hover-shadow-offset) 0px var(--shadow-color);
+  transform: translate(var(--translate-hover), var(--translate-hover));
+}
+
+/* ============================================
+   Active State (uses CSS custom properties)
+   ============================================ */
+
+.like-button:active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(var(--shadow-offset), var(--shadow-offset)) scale(0.9);
+}
+
+/* ============================================
    Disabled State
    ============================================ */
 
@@ -78,6 +96,7 @@
 
 .like-button:disabled:hover {
   transform: none;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
 }
 
 /* ============================================
