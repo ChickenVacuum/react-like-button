@@ -26,7 +26,7 @@
     "*.css"
   ],
   "scripts": {
-    "build": "tsup && cat src/LikeButton/LikeButton.vanilla.css src/Particle/Particle.vanilla.css > dist/styles.css",
+    "build": "tsup && node scripts/build-css.js",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
