@@ -210,9 +210,9 @@ describe("LikeButtonVanilla", () => {
   })
 
   describe("controlled mode", () => {
-    it("should use external localClicks value", () => {
+    it("should use external clicks value", () => {
       const onClick = vi.fn()
-      render(<LikeButtonVanilla localClicks={5} maxClicks={10} onClick={onClick} />)
+      render(<LikeButtonVanilla clicks={5} maxClicks={10} onClick={onClick} />)
 
       const button = screen.getByRole("button")
       fireEvent.click(button)
@@ -220,8 +220,8 @@ describe("LikeButtonVanilla", () => {
       expect(onClick).toHaveBeenCalledWith(6, expect.any(Object))
     })
 
-    it("should be disabled when external localClicks equals maxClicks", () => {
-      render(<LikeButtonVanilla localClicks={10} maxClicks={10} />)
+    it("should be disabled when external clicks equals maxClicks", () => {
+      render(<LikeButtonVanilla clicks={10} maxClicks={10} />)
 
       const button = screen.getByRole("button")
       expect(button).toBeDisabled()
@@ -403,7 +403,7 @@ describe("LikeButtonVanilla", () => {
           particleConfig={{ count: 10 }}
           showParticles={true}
           maxClicks={5}
-          localClicks={2}
+          clicks={2}
         />,
       )
       expect(screen.getByRole("button")).toBeInTheDocument()
@@ -549,7 +549,7 @@ describe("LikeButtonVanilla", () => {
     })
 
     it("should scale correctly with clicks", () => {
-      render(<LikeButtonVanilla minFillPercent={10} localClicks={5} maxClicks={10} />)
+      render(<LikeButtonVanilla minFillPercent={10} clicks={5} maxClicks={10} />)
 
       const button = screen.getByRole("button")
       const fill = button.querySelector(".like-button__fill")
@@ -559,7 +559,7 @@ describe("LikeButtonVanilla", () => {
     })
 
     it("should show 100% height when maxed regardless of minFillPercent", () => {
-      render(<LikeButtonVanilla minFillPercent={20} localClicks={10} maxClicks={10} />)
+      render(<LikeButtonVanilla minFillPercent={20} clicks={10} maxClicks={10} />)
 
       const button = screen.getByRole("button")
       const fill = button.querySelector(".like-button__fill")
