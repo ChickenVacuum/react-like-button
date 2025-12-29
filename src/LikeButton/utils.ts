@@ -1,10 +1,47 @@
 import type { Cursor, CursorPreset, Shape, StyleOverrides } from "./types"
 
+// ============================================
+// Layout & Animation Constants
+// ============================================
+
 /**
  * Maximum fill height percentage.
  * Leaves room for wave animation at top (15% reserved for wave visual).
  */
 export const MAX_FILL_HEIGHT = 85
+
+/**
+ * Icon size as a ratio of the button size.
+ * Icon will be 50% of the button dimension.
+ */
+export const ICON_SIZE_RATIO = 0.5
+
+/**
+ * Minimum hover offset in pixels.
+ * Used to ensure the button always has some visible hover movement.
+ */
+export const MIN_HOVER_OFFSET = 2
+
+/**
+ * Buffer time (ms) added to particle animation duration before cleanup.
+ * Ensures animation completes before particle is removed from DOM.
+ */
+export const PARTICLE_CLEANUP_BUFFER_MS = 100
+
+// ============================================
+// Wave Animation Durations (seconds)
+// These are used in inline styles and CSS animations
+// ============================================
+
+/** Duration for the back wave animation (slower, creates depth) */
+export const WAVE_BACK_DURATION_S = 3
+
+/** Duration for the front wave animation (faster, creates motion) */
+export const WAVE_FRONT_DURATION_S = 1.5
+
+// ============================================
+// Default Styles
+// ============================================
 
 /** Default style values for brutalist design */
 export const DEFAULT_STYLES: Required<StyleOverrides> = {
@@ -47,10 +84,10 @@ export function getShapeStyles(shape: Shape = "circle"): React.CSSProperties {
 
 /**
  * Compute the shadow offset for hover state.
- * Returns half the original offset, with a minimum of 2px.
+ * Returns half the original offset, with a minimum defined by MIN_HOVER_OFFSET.
  */
 export function computeHoverOffset(shadowOffset: number): number {
-  return Math.max(shadowOffset / 2, 2)
+  return Math.max(shadowOffset / 2, MIN_HOVER_OFFSET)
 }
 
 /**

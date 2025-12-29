@@ -10,7 +10,10 @@ import {
   DEFAULT_STYLES,
   getCursorStyle,
   getShapeStyles,
+  ICON_SIZE_RATIO,
   MAX_FILL_HEIGHT,
+  WAVE_BACK_DURATION_S,
+  WAVE_FRONT_DURATION_S,
 } from "./utils"
 
 export type { LikeButtonProps }
@@ -149,7 +152,7 @@ export const LikeButton = forwardRef<HTMLButtonElement, LikeButtonProps>(functio
   )
 
   // Icon configuration
-  const iconSize = size * 0.5
+  const iconSize = size * ICON_SIZE_RATIO
   const iconRenderProps = {
     size: iconSize,
     className: "relative z-20 transition-colors duration-300 pointer-events-none",
@@ -195,7 +198,7 @@ export const LikeButton = forwardRef<HTMLButtonElement, LikeButtonProps>(functio
           {/* Wave 1 (Back Layer) */}
           <div
             className={WAVE_CONTAINER_CLASSES}
-            style={{ animation: "wave-scroll-left 3s linear infinite" }}
+            style={{ animation: `wave-scroll-left ${WAVE_BACK_DURATION_S}s linear infinite` }}
           >
             {[0, 1].map((i) => (
               <svg
@@ -214,7 +217,7 @@ export const LikeButton = forwardRef<HTMLButtonElement, LikeButtonProps>(functio
           {/* Wave 2 (Front Layer) */}
           <div
             className={WAVE_CONTAINER_CLASSES}
-            style={{ animation: "wave-scroll-right 1.5s linear infinite" }}
+            style={{ animation: `wave-scroll-right ${WAVE_FRONT_DURATION_S}s linear infinite` }}
           >
             {[0, 1].map((i) => (
               <svg
