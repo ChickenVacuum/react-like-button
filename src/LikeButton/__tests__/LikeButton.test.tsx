@@ -208,6 +208,69 @@ describe("LikeButton", () => {
     })
   })
 
+  describe("keyboard accessibility", () => {
+    it("should trigger onRightClick with Shift+Enter", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButton onRightClick={onRightClick} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.keyDown(button, { key: "Enter", shiftKey: true })
+
+      expect(onRightClick).toHaveBeenCalledWith(0)
+    })
+
+    it("should not trigger onRightClick with Enter only (no Shift)", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButton onRightClick={onRightClick} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.keyDown(button, { key: "Enter", shiftKey: false })
+
+      expect(onRightClick).not.toHaveBeenCalled()
+    })
+
+    it("should not trigger onRightClick with Shift+Enter when disabled", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButton onRightClick={onRightClick} disabled />)
+
+      const button = screen.getByRole("button")
+      fireEvent.keyDown(button, { key: "Enter", shiftKey: true })
+
+      expect(onRightClick).not.toHaveBeenCalled()
+    })
+
+    it("should have aria-keyshortcuts when onRightClick is provided", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButton onRightClick={onRightClick} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveAttribute("aria-keyshortcuts", "Shift+Enter")
+    })
+
+    it("should not have aria-keyshortcuts when onRightClick is not provided", () => {
+      render(<LikeButton />)
+
+      const button = screen.getByRole("button")
+      expect(button).not.toHaveAttribute("aria-keyshortcuts")
+    })
+
+    it("should use current click count when Shift+Enter is pressed", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButton onRightClick={onRightClick} />)
+
+      const button = screen.getByRole("button")
+
+      // Click twice first
+      fireEvent.click(button)
+      fireEvent.click(button)
+
+      // Then use Shift+Enter
+      fireEvent.keyDown(button, { key: "Enter", shiftKey: true })
+
+      expect(onRightClick).toHaveBeenCalledWith(2)
+    })
+  })
+
   describe("accessibility", () => {
     it("should have aria-label", () => {
       render(<LikeButton />)

@@ -128,6 +128,92 @@ describe("useLikeButton", () => {
     })
   })
 
+  describe("keyboard accessibility (handleKeyDown)", () => {
+    it("should call onRightClick when Shift+Enter is pressed", () => {
+      const onRightClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onRightClick }))
+
+      const mockEvent = {
+        shiftKey: true,
+        key: "Enter",
+        preventDefault: vi.fn(),
+      } as unknown as React.KeyboardEvent
+
+      act(() => {
+        result.current.handleKeyDown(mockEvent)
+      })
+
+      expect(onRightClick).toHaveBeenCalledWith(0)
+      expect(mockEvent.preventDefault).toHaveBeenCalled()
+    })
+
+    it("should not call onRightClick on Enter without Shift", () => {
+      const onRightClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onRightClick }))
+
+      const mockEvent = {
+        shiftKey: false,
+        key: "Enter",
+        preventDefault: vi.fn(),
+      } as unknown as React.KeyboardEvent
+
+      act(() => {
+        result.current.handleKeyDown(mockEvent)
+      })
+
+      expect(onRightClick).not.toHaveBeenCalled()
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled()
+    })
+
+    it("should not call onRightClick on Shift with other keys", () => {
+      const onRightClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onRightClick }))
+
+      const mockEvent = {
+        shiftKey: true,
+        key: "Space",
+        preventDefault: vi.fn(),
+      } as unknown as React.KeyboardEvent
+
+      act(() => {
+        result.current.handleKeyDown(mockEvent)
+      })
+
+      expect(onRightClick).not.toHaveBeenCalled()
+      expect(mockEvent.preventDefault).not.toHaveBeenCalled()
+    })
+
+    it("should not call onRightClick when disabled", () => {
+      const onRightClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onRightClick, disabled: true }))
+
+      const mockEvent = {
+        shiftKey: true,
+        key: "Enter",
+        preventDefault: vi.fn(),
+      } as unknown as React.KeyboardEvent
+
+      act(() => {
+        result.current.handleKeyDown(mockEvent)
+      })
+
+      expect(onRightClick).not.toHaveBeenCalled()
+    })
+
+    it("should report hasRightClickAction as true when onRightClick is provided", () => {
+      const onRightClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onRightClick }))
+
+      expect(result.current.hasRightClickAction).toBe(true)
+    })
+
+    it("should report hasRightClickAction as false when onRightClick is not provided", () => {
+      const { result } = renderHook(() => useLikeButton())
+
+      expect(result.current.hasRightClickAction).toBe(false)
+    })
+  })
+
   describe("max clicks", () => {
     it("should use default maxClicks", () => {
       const { result } = renderHook(() => useLikeButton())

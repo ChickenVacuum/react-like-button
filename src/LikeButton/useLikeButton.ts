@@ -87,10 +87,17 @@ export interface UseLikeButtonReturn {
   handleClick: () => void
   /** Right-click handler for the button */
   handleRightClick: (e: React.MouseEvent) => void
+  /**
+   * Keyboard handler for accessibility.
+   * Triggers onRightClick when Shift+Enter is pressed.
+   */
+  handleKeyDown: (e: React.KeyboardEvent) => void
   /** Aria label for accessibility */
   ariaLabel: string
   /** Whether button has been pressed */
   isPressed: boolean
+  /** Whether onRightClick is provided (for aria-keyshortcuts) */
+  hasRightClickAction: boolean
 }
 
 /**
@@ -206,6 +213,21 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     [disabled, localClicks, onRightClick],
   )
 
+  /**
+   * Keyboard handler for accessibility.
+   * Shift+Enter triggers the right-click action as a keyboard alternative.
+   */
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.shiftKey && e.key === "Enter") {
+        e.preventDefault()
+        if (disabled) return
+        onRightClick?.(localClicks)
+      }
+    },
+    [disabled, localClicks, onRightClick],
+  )
+
   const fillPercentage = (localClicks / maxClicks) * 100
 
   const defaultAriaLabel = isMaxed
@@ -220,7 +242,9 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     particles,
     handleClick,
     handleRightClick,
+    handleKeyDown,
     ariaLabel: customAriaLabel ?? defaultAriaLabel,
     isPressed: localClicks > 0,
+    hasRightClickAction: onRightClick !== undefined,
   }
 }
