@@ -10,11 +10,11 @@ import {
   DEFAULT_STYLES,
   getCursorStyle,
   getShapeStyles,
+  MAX_FILL_HEIGHT,
 } from "./utils"
 
 export type { LikeButtonProps }
 
-// Maximum fill height percentage (leaves room for wave animation at top)
 // Static Tailwind class strings extracted to avoid string concatenation on every render
 const BUTTON_BASE_CLASSES =
   "relative overflow-hidden z-10 border-solid flex items-center justify-center group transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-dark focus-visible:ring-offset-2"
@@ -25,7 +25,6 @@ const WAVE_CONTAINER_CLASSES = "absolute bottom-full left-0 w-[200%] h-4 flex"
 const WAVE_SVG_CLASSES = "w-1/2 h-full fill-current"
 const PARTICLE_CONTAINER_CLASSES =
   "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-const MAX_FILL_HEIGHT = 85
 
 /**
  * LikeButton - Animated like button with liquid fill and particle effects.
