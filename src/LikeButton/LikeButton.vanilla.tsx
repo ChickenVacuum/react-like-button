@@ -27,7 +27,7 @@ const MAX_FILL_HEIGHT = 85
  * import '@jepepa/like-button/styles.css';
  *
  * // Default usage
- * <LikeButtonVanilla onClick={(clicks) => console.log('Clicks:', clicks)} />
+ * <LikeButtonVanilla onClick={(clicks, event) => console.log('Clicks:', clicks)} />
  *
  * // Custom icon
  * <LikeButtonVanilla renderIcon={({ size }) => <CustomIcon size={size} />} />

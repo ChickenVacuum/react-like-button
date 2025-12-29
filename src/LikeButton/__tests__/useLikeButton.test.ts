@@ -1,6 +1,10 @@
 import { act, renderHook } from "@testing-library/react"
+import type React from "react"
 import { describe, expect, it, vi } from "vitest"
 import { LIKE_BUTTON_DEFAULTS, useLikeButton } from "../useLikeButton"
+
+// Helper to create mock mouse event for handleClick
+const createMockMouseEvent = () => ({}) as React.MouseEvent<HTMLButtonElement>
 
 describe("useLikeButton", () => {
   describe("initial state", () => {
@@ -46,28 +50,30 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton())
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.localClicks).toBe(1)
     })
 
-    it("should call onClick with new click count", () => {
+    it("should call onClick with new click count and event", () => {
       const onClick = vi.fn()
       const { result } = renderHook(() => useLikeButton({ onClick }))
 
+      const mockEvent = {} as React.MouseEvent<HTMLButtonElement>
+
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(mockEvent)
       })
 
-      expect(onClick).toHaveBeenCalledWith(1)
+      expect(onClick).toHaveBeenCalledWith(1, mockEvent)
     })
 
     it("should update fillPercentage on click", () => {
       const { result } = renderHook(() => useLikeButton({ maxClicks: 10 }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.fillPercentage).toBe(10)
@@ -77,7 +83,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton())
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.isPressed).toBe(true)
@@ -85,17 +91,19 @@ describe("useLikeButton", () => {
   })
 
   describe("right-click handling", () => {
-    it("should call onRightClick with current click count", () => {
+    it("should call onRightClick with current click count and event", () => {
       const onRightClick = vi.fn()
       const { result } = renderHook(() => useLikeButton({ onRightClick }))
 
-      const mockEvent = { preventDefault: vi.fn() } as unknown as React.MouseEvent
+      const mockEvent = {
+        preventDefault: vi.fn(),
+      } as unknown as React.MouseEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleRightClick(mockEvent)
       })
 
-      expect(onRightClick).toHaveBeenCalledWith(0)
+      expect(onRightClick).toHaveBeenCalledWith(0, mockEvent)
       expect(mockEvent.preventDefault).toHaveBeenCalled()
     })
 
@@ -137,13 +145,13 @@ describe("useLikeButton", () => {
         shiftKey: true,
         key: "Enter",
         preventDefault: vi.fn(),
-      } as unknown as React.KeyboardEvent
+      } as unknown as React.KeyboardEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleKeyDown(mockEvent)
       })
 
-      expect(onRightClick).toHaveBeenCalledWith(0)
+      expect(onRightClick).toHaveBeenCalledWith(0, mockEvent)
       expect(mockEvent.preventDefault).toHaveBeenCalled()
     })
 
@@ -221,7 +229,7 @@ describe("useLikeButton", () => {
       // Click up to max - each click in separate act to allow state updates
       for (let i = 0; i < LIKE_BUTTON_DEFAULTS.maxClicks; i++) {
         act(() => {
-          result.current.handleClick()
+          result.current.handleClick(createMockMouseEvent())
         })
       }
 
@@ -232,13 +240,13 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ maxClicks: 3 }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.isMaxed).toBe(true)
@@ -249,7 +257,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ maxClicks: 1 }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.disabled).toBe(true)
@@ -261,13 +269,13 @@ describe("useLikeButton", () => {
 
       // Each click in separate act to allow state updates between clicks
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
       act(() => {
-        result.current.handleClick() // Should be ignored
+        result.current.handleClick(createMockMouseEvent()) // Should be ignored
       })
 
       expect(onClick).toHaveBeenCalledTimes(2)
@@ -294,15 +302,17 @@ describe("useLikeButton", () => {
       expect(result.current.isMaxed).toBe(true)
     })
 
-    it("should call onClick with incremented external value", () => {
+    it("should call onClick with incremented external value and event", () => {
       const onClick = vi.fn()
       const { result } = renderHook(() => useLikeButton({ localClicks: 5, onClick }))
 
+      const mockEvent = {} as React.MouseEvent<HTMLButtonElement>
+
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(mockEvent)
       })
 
-      expect(onClick).toHaveBeenCalledWith(6)
+      expect(onClick).toHaveBeenCalledWith(6, mockEvent)
     })
   })
 
@@ -318,7 +328,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ disabled: true, onClick }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(onClick).not.toHaveBeenCalled()
@@ -330,7 +340,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton())
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.particles.length).toBeGreaterThan(0)
@@ -340,7 +350,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ particleConfig: { count: 5 } }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.particles).toHaveLength(5)
@@ -350,7 +360,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ showParticles: false }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.particles).toHaveLength(0)
@@ -363,7 +373,7 @@ describe("useLikeButton", () => {
       )
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -375,7 +385,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ particlePreset: "burst" }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       // Burst preset has 12 particles
@@ -393,7 +403,7 @@ describe("useLikeButton", () => {
       )
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       // Custom count overrides preset count
@@ -406,7 +416,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ particleConfig: { shape: "star" } }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -418,7 +428,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ particleConfig: { speed: 1000 } }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -433,7 +443,7 @@ describe("useLikeButton", () => {
       )
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -445,7 +455,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ particleConfig: { fadeOut: false } }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -461,7 +471,7 @@ describe("useLikeButton", () => {
       )
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -478,7 +488,7 @@ describe("useLikeButton", () => {
       )
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       result.current.particles.forEach((particle) => {
@@ -495,7 +505,7 @@ describe("useLikeButton", () => {
       )
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       // All angles should be between 0 and 90 degrees
@@ -509,7 +519,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton())
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       const ids = result.current.particles.map((p) => p.id)
@@ -529,7 +539,7 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ maxClicks: 1 }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.ariaLabel).toContain("Thank you")
@@ -562,13 +572,13 @@ describe("useLikeButton", () => {
       expect(result.current.ariaLabel).toBe("2 left")
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.ariaLabel).toBe("1 left")
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(result.current.ariaLabel).toBe("Maxed!")
@@ -579,11 +589,11 @@ describe("useLikeButton", () => {
       const { result } = renderHook(() => useLikeButton({ maxClicks: 5, ariaLabel: ariaLabelFn }))
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       act(() => {
-        result.current.handleClick()
+        result.current.handleClick(createMockMouseEvent())
       })
 
       expect(ariaLabelFn).toHaveBeenLastCalledWith({
