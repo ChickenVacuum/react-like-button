@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
-import { afterEach, describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { LikeButtonVanilla } from "../LikeButton.vanilla"
 import { getParticleCount, getParticleSvgs, PARTICLE_PRESETS, PARTICLE_SHAPES } from "./test-utils"
 
@@ -20,6 +20,210 @@ describe("LikeButtonVanilla", () => {
     it("should render with custom size", () => {
       render(<LikeButtonVanilla size={120} />)
       expect(screen.getByRole("button")).toBeInTheDocument()
+    })
+  })
+
+  describe("default maxClicks=1 behavior", () => {
+    it("should fill to max with single click by default", () => {
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla onClick={onClick} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
+      expect(button).toBeDisabled()
+    })
+
+    it("should be disabled after one click with default settings", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(button).toBeDisabled()
+    })
+  })
+
+  describe("click behavior", () => {
+    it("should call onClick with click count", () => {
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla onClick={onClick} maxClicks={5} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
+    })
+
+    it("should increment clicks on each click", () => {
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla onClick={onClick} maxClicks={5} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+      fireEvent.click(button)
+      fireEvent.click(button)
+
+      expect(onClick).toHaveBeenCalledTimes(3)
+      expect(onClick).toHaveBeenLastCalledWith(3, expect.any(Object))
+    })
+
+    it("should stop responding after maxClicks", () => {
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla onClick={onClick} maxClicks={2} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+      fireEvent.click(button)
+      fireEvent.click(button) // Should be ignored
+
+      expect(onClick).toHaveBeenCalledTimes(2)
+    })
+
+    it("should not respond when disabled", () => {
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla onClick={onClick} disabled />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(onClick).not.toHaveBeenCalled()
+    })
+  })
+
+  describe("right-click behavior", () => {
+    it("should call onRightClick with current click count", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButtonVanilla onRightClick={onRightClick} maxClicks={5} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.contextMenu(button)
+
+      expect(onRightClick).toHaveBeenCalledWith(0, expect.any(Object))
+    })
+
+    it("should not increment clicks on right-click", () => {
+      const onClick = vi.fn()
+      const onRightClick = vi.fn()
+      render(<LikeButtonVanilla onClick={onClick} onRightClick={onRightClick} maxClicks={5} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.contextMenu(button)
+      fireEvent.contextMenu(button)
+
+      expect(onRightClick).toHaveBeenCalledTimes(2)
+      expect(onRightClick).toHaveBeenLastCalledWith(0, expect.any(Object))
+
+      fireEvent.click(button)
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
+
+      fireEvent.contextMenu(button)
+      expect(onRightClick).toHaveBeenLastCalledWith(1, expect.any(Object))
+    })
+
+    it("should not call onRightClick when disabled", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButtonVanilla onRightClick={onRightClick} disabled />)
+
+      const button = screen.getByRole("button")
+      fireEvent.contextMenu(button)
+
+      expect(onRightClick).not.toHaveBeenCalled()
+    })
+  })
+
+  describe("keyboard accessibility", () => {
+    it("should trigger onRightClick with Shift+Enter", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButtonVanilla onRightClick={onRightClick} maxClicks={5} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.keyDown(button, { key: "Enter", shiftKey: true })
+
+      expect(onRightClick).toHaveBeenCalledWith(0, expect.any(Object))
+    })
+
+    it("should not trigger onRightClick with Enter only", () => {
+      const onRightClick = vi.fn()
+      render(<LikeButtonVanilla onRightClick={onRightClick} maxClicks={5} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.keyDown(button, { key: "Enter", shiftKey: false })
+
+      expect(onRightClick).not.toHaveBeenCalled()
+    })
+
+    it("should have aria-keyshortcuts when onRightClick is provided", () => {
+      render(<LikeButtonVanilla onRightClick={() => {}} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveAttribute("aria-keyshortcuts", "Shift+Enter")
+    })
+
+    it("should not have aria-keyshortcuts when onRightClick is not provided", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      expect(button).not.toHaveAttribute("aria-keyshortcuts")
+    })
+  })
+
+  describe("accessibility", () => {
+    it("should have aria-label", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveAttribute("aria-label")
+    })
+
+    it("should have aria-pressed attribute", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveAttribute("aria-pressed", "false")
+    })
+
+    it("should update aria-pressed after click", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(button).toHaveAttribute("aria-pressed", "true")
+    })
+
+    it("should have aria-disabled when disabled", () => {
+      render(<LikeButtonVanilla disabled />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveAttribute("aria-disabled", "true")
+    })
+
+    it("should accept custom aria-label", () => {
+      render(<LikeButtonVanilla ariaLabel="Custom label" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveAttribute("aria-label", "Custom label")
+    })
+  })
+
+  describe("controlled mode", () => {
+    it("should use external localClicks value", () => {
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla localClicks={5} maxClicks={10} onClick={onClick} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(onClick).toHaveBeenCalledWith(6, expect.any(Object))
+    })
+
+    it("should be disabled when external localClicks equals maxClicks", () => {
+      render(<LikeButtonVanilla localClicks={10} maxClicks={10} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toBeDisabled()
     })
   })
 
