@@ -73,6 +73,13 @@ function App() {
 
 ## Particle Effects
 
+### Disable Particles
+
+```tsx
+// Disable particle effects entirely
+<LikeButton showParticles={false} />
+```
+
 ### Built-in Presets
 
 Choose from 5 designed particle effects:
