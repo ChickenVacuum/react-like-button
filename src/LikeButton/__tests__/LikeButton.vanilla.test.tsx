@@ -1,12 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
 import { LikeButtonVanilla } from "../LikeButton.vanilla"
-import {
-  getParticleCount,
-  getParticleSvgs,
-  PARTICLE_PRESETS,
-  PARTICLE_SHAPES,
-} from "./test-utils.tsx"
+import { getParticleCount, getParticleSvgs, PARTICLE_PRESETS, PARTICLE_SHAPES } from "./test-utils"
 
 // Selector for vanilla component particles
 const PARTICLE_SELECTOR = ".like-button__particles > div"

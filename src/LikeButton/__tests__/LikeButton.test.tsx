@@ -3,12 +3,7 @@ import { createRef } from "react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { LikeButton } from "../LikeButton"
 import { getCursorStyle } from "../utils"
-import {
-  getParticleCount,
-  getParticleSvgs,
-  PARTICLE_PRESETS,
-  PARTICLE_SHAPES,
-} from "./test-utils.tsx"
+import { getParticleCount, getParticleSvgs, PARTICLE_PRESETS, PARTICLE_SHAPES } from "./test-utils"
 
 // Selector for Tailwind component particles
 const PARTICLE_SELECTOR = '[aria-hidden="true"] > div'
