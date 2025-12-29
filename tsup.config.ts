@@ -4,11 +4,13 @@ import { defineConfig } from "tsup"
  * CSS Bundling Note:
  *
  * The vanilla CSS files (LikeButton.vanilla.css, Particle.vanilla.css) are
- * concatenated via `cat` in the build script (package.json).
+ * concatenated via scripts/build-css.js (cross-platform Node.js script).
  *
- * If the project scales with more CSS files, consider using postcss-import:
- *   1. pnpm add -D postcss-import
- *   2. Create postcss.config.js: { plugins: [require('postcss-import')] }
+ * To add more CSS files, update the cssFiles array in scripts/build-css.js.
+ *
+ * If the project scales significantly, consider using postcss-import:
+ *   1. pnpm add -D postcss postcss-cli postcss-import cssnano
+ *   2. Create postcss.config.js with import and minification plugins
  *   3. Create src/styles.css with: @import "./LikeButton/LikeButton.vanilla.css";
  *   4. Update build: "tsup && postcss src/styles.css -o dist/styles.css"
  */
