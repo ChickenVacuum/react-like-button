@@ -121,6 +121,28 @@ describe("LikeButton", () => {
     })
   })
 
+  describe("default maxClicks=1 behavior", () => {
+    it("should fill to max with single click by default", () => {
+      const onClick = vi.fn()
+      render(<LikeButton onClick={onClick} />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
+      expect(button).toBeDisabled()
+    })
+
+    it("should be disabled after one click with default settings", () => {
+      render(<LikeButton />)
+
+      const button = screen.getByRole("button")
+      fireEvent.click(button)
+
+      expect(button).toBeDisabled()
+    })
+  })
+
   describe("click behavior", () => {
     it("should call onClick with click count", () => {
       const onClick = vi.fn()
