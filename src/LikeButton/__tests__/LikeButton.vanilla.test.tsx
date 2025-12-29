@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { createRef } from "react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { LikeButtonVanilla } from "../LikeButton.vanilla"
 import { getParticleCount, getParticleSvgs, PARTICLE_PRESETS, PARTICLE_SHAPES } from "./test-utils"
@@ -412,6 +413,208 @@ describe("LikeButtonVanilla", () => {
       render(<LikeButtonVanilla particlePreset="confetti" />)
       fireEvent.click(screen.getByRole("button"))
       expect(getParticleCount(PARTICLE_SELECTOR)).toBe(15)
+    })
+  })
+
+  describe("shape prop", () => {
+    it("should apply circle shape by default", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ borderRadius: "9999px" })
+    })
+
+    it("should apply rounded shape", () => {
+      render(<LikeButtonVanilla shape="rounded" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ borderRadius: "1rem" })
+    })
+
+    it("should apply square shape", () => {
+      render(<LikeButtonVanilla shape="square" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ borderRadius: "0" })
+    })
+
+    it("should apply custom borderRadius", () => {
+      render(<LikeButtonVanilla shape={{ borderRadius: "2rem" }} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ borderRadius: "2rem" })
+    })
+  })
+
+  describe("styles prop", () => {
+    it("should apply custom border width", () => {
+      render(<LikeButtonVanilla styles={{ borderWidth: 2 }} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ borderWidth: "2px" })
+    })
+
+    it("should apply custom border color", () => {
+      render(<LikeButtonVanilla styles={{ borderColor: "#ff0000" }} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ borderColor: "#ff0000" })
+    })
+
+    it("should apply custom background color", () => {
+      render(<LikeButtonVanilla styles={{ backgroundColor: "#f0f0f0" }} />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ backgroundColor: "#f0f0f0" })
+    })
+  })
+
+  describe("cursor prop", () => {
+    it("should apply heart cursor by default", () => {
+      render(<LikeButtonVanilla />)
+
+      const button = screen.getByRole("button")
+      const cursorStyle = button.style.cursor
+      expect(cursorStyle).toContain("url(")
+    })
+
+    it("should apply pointer cursor", () => {
+      render(<LikeButtonVanilla cursor="pointer" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ cursor: "pointer" })
+    })
+
+    it("should apply none cursor", () => {
+      render(<LikeButtonVanilla cursor="none" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ cursor: "none" })
+    })
+
+    it("should apply not-allowed cursor when disabled", () => {
+      render(<LikeButtonVanilla disabled cursor="heart" />)
+
+      const button = screen.getByRole("button")
+      expect(button).toHaveStyle({ cursor: "not-allowed" })
+    })
+  })
+
+  describe("renderIcon prop", () => {
+    it("should render custom icon", () => {
+      render(
+        <LikeButtonVanilla
+          renderIcon={({ size }) => (
+            <span data-testid="custom-icon" style={{ width: size }}>
+              ★
+            </span>
+          )}
+        />,
+      )
+
+      expect(screen.getByTestId("custom-icon")).toBeInTheDocument()
+    })
+
+    it("should render no icon when null", () => {
+      render(<LikeButtonVanilla renderIcon={null} />)
+
+      const button = screen.getByRole("button")
+      // The icon SVG has viewBox="0 0 24 24", wave SVGs have "0 0 100 20"
+      const iconSvg = button.querySelector('svg[viewBox="0 0 24 24"]')
+      expect(iconSvg).not.toBeInTheDocument()
+    })
+
+    it("should pass correct props to renderIcon", () => {
+      const renderIcon = vi.fn(() => <span>Icon</span>)
+      render(<LikeButtonVanilla size={100} renderIcon={renderIcon} />)
+
+      expect(renderIcon).toHaveBeenCalledWith(
+        expect.objectContaining({
+          size: 50, // 50% of button size
+          isMaxed: false,
+          fillPercentage: 0,
+        }),
+      )
+    })
+  })
+
+  describe("minFillPercent prop", () => {
+    it("should apply minimum fill percentage when no clicks", () => {
+      render(<LikeButtonVanilla minFillPercent={20} />)
+
+      const button = screen.getByRole("button")
+      const fill = button.querySelector(".like-button__fill")
+
+      expect(fill).toHaveStyle({ height: "20%" })
+    })
+
+    it("should scale correctly with clicks", () => {
+      render(<LikeButtonVanilla minFillPercent={10} localClicks={5} maxClicks={10} />)
+
+      const button = screen.getByRole("button")
+      const fill = button.querySelector(".like-button__fill")
+
+      // fillPercentage = 50%, expected: 10 + (50/100) * (85-10) = 47.5%
+      expect(fill).toHaveStyle({ height: "47.5%" })
+    })
+
+    it("should show 100% height when maxed regardless of minFillPercent", () => {
+      render(<LikeButtonVanilla minFillPercent={20} localClicks={10} maxClicks={10} />)
+
+      const button = screen.getByRole("button")
+      const fill = button.querySelector(".like-button__fill")
+
+      // When maxed, should always be 100%
+      expect(fill).toHaveStyle({ height: "100%" })
+    })
+
+    it("should clamp minFillPercent above 85 to 85", () => {
+      render(<LikeButtonVanilla minFillPercent={100} />)
+
+      const button = screen.getByRole("button")
+      const fill = button.querySelector(".like-button__fill")
+
+      // Should be clamped to 85%
+      expect(fill).toHaveStyle({ height: "85%" })
+    })
+
+    it("should clamp negative minFillPercent to 0", () => {
+      render(<LikeButtonVanilla minFillPercent={-10} />)
+
+      const button = screen.getByRole("button")
+      const fill = button.querySelector(".like-button__fill")
+
+      // Should be clamped to 0%
+      expect(fill).toHaveStyle({ height: "0%" })
+    })
+  })
+
+  describe("ref forwarding", () => {
+    it("should forward ref to the button element", () => {
+      const ref = createRef<HTMLButtonElement>()
+      render(<LikeButtonVanilla ref={ref} />)
+
+      expect(ref.current).toBeInstanceOf(HTMLButtonElement)
+      expect(ref.current?.tagName).toBe("BUTTON")
+    })
+
+    it("should allow programmatic focus via ref", () => {
+      const ref = createRef<HTMLButtonElement>()
+      render(<LikeButtonVanilla ref={ref} />)
+
+      ref.current?.focus()
+
+      expect(document.activeElement).toBe(ref.current)
+    })
+
+    it("should allow programmatic click via ref", () => {
+      const ref = createRef<HTMLButtonElement>()
+      const onClick = vi.fn()
+      render(<LikeButtonVanilla ref={ref} onClick={onClick} />)
+
+      ref.current?.click()
+
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
     })
   })
 })
