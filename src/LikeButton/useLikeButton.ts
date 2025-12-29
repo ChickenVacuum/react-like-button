@@ -156,8 +156,10 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     // Cleanup particles after animation completes
     // Add buffer time to ensure animation finishes
     const cleanupDelay = config.speed + 100
+    // Use Set for O(1) lookup instead of O(n) find() - avoids O(n²) filter
+    const idsToRemove = new Set(newParticles.map((p) => p.id))
     setTimeout(() => {
-      setParticles((prev) => prev.filter((p) => !newParticles.find((np) => np.id === p.id)))
+      setParticles((prev) => prev.filter((p) => !idsToRemove.has(p.id)))
     }, cleanupDelay)
   }, [showParticles, particlePreset, particleConfig])
 
