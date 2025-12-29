@@ -83,7 +83,8 @@
     "headless-ui",
     "customizable",
     "accessible",
-    "a11y"
+    "a11y",
+    "multiple-likes"
   ],
   "author": "Jepepa",
   "license": "MIT",
