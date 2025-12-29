@@ -3,17 +3,19 @@
   "version": "0.8.5",
   "description": "Animated React like button component with liquid fill effect, particle animations, and customizable shapes. Supports Tailwind CSS and vanilla CSS. TypeScript-ready, accessible, and headless.",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./vanilla": {
       "types": "./dist/vanilla.d.ts",
-      "import": "./dist/vanilla.js"
+      "import": "./dist/vanilla.js",
+      "require": "./dist/vanilla.cjs"
     },
     "./styles.css": "./dist/styles.css"
   },
