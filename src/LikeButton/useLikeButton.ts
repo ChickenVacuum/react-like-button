@@ -67,6 +67,12 @@ export interface UseLikeButtonOptions {
    */
   onClick?: (clicks: number, event: React.MouseEvent<HTMLButtonElement>) => void
   /**
+   * Callback when click count changes. Simpler alternative to onClick for controlled mode.
+   * Called with just the new count, ideal for state setters like `onChange={setClicks}`.
+   * @param clicks - The new click count
+   */
+  onChange?: (clicks: number) => void
+  /**
    * Callback when button is right-clicked. Also triggered by Shift+Enter for keyboard accessibility.
    * @param clicks - The current click count, not incremented as right-click does not increment
    * @param event - The mouse or keyboard event that triggered the action
@@ -184,6 +190,7 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     clicks: externalClicks,
     maxClicks = LIKE_BUTTON_DEFAULTS.maxClicks,
     onClick,
+    onChange,
     onRightClick,
     disabled: externalDisabled,
     showParticles = true,
@@ -266,9 +273,10 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
       }
 
       spawnParticles()
+      onChange?.(newClicks)
       onClick?.(newClicks, e)
     },
-    [disabled, clicks, externalClicks, spawnParticles, onClick],
+    [disabled, clicks, externalClicks, spawnParticles, onChange, onClick],
   )
 
   const handleRightClick = useCallback(

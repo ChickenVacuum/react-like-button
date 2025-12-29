@@ -70,6 +70,63 @@ describe("useLikeButton", () => {
       expect(onClick).toHaveBeenCalledWith(1, mockEvent)
     })
 
+    it("should call onChange with new click count", () => {
+      const onChange = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onChange }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(onChange).toHaveBeenCalledWith(1)
+    })
+
+    it("should call onChange before onClick", () => {
+      const callOrder: string[] = []
+      const onChange = vi.fn(() => callOrder.push("onChange"))
+      const onClick = vi.fn(() => callOrder.push("onClick"))
+      const { result } = renderHook(() => useLikeButton({ onChange, onClick }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(callOrder).toEqual(["onChange", "onClick"])
+    })
+
+    it("should call both onChange and onClick on each click", () => {
+      const onChange = vi.fn()
+      const onClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onChange, onClick, maxClicks: 5 }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(onChange).toHaveBeenCalledTimes(3)
+      expect(onClick).toHaveBeenCalledTimes(3)
+      expect(onChange).toHaveBeenNthCalledWith(1, 1)
+      expect(onChange).toHaveBeenNthCalledWith(2, 2)
+      expect(onChange).toHaveBeenNthCalledWith(3, 3)
+    })
+
+    it("should not call onChange when disabled", () => {
+      const onChange = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ onChange, disabled: true }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
     it("should update fillPercentage on click", () => {
       const { result } = renderHook(() => useLikeButton({ maxClicks: 10 }))
 
