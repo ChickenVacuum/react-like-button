@@ -128,7 +128,7 @@ export interface UseLikeButtonOptions {
 
 /** Default values */
 export const LIKE_BUTTON_DEFAULTS = {
-  maxClicks: 14,
+  maxClicks: 1,
   size: 96,
   fillColor: "#EF4444",
   waveColor: "#B91C1C",
