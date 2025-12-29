@@ -59,10 +59,21 @@ export interface UseLikeButtonOptions {
   localClicks?: number
   /** Maximum number of clicks allowed per user */
   maxClicks?: number
-  /** Callback when button is clicked. Receives the new local click count. */
-  onClick?: (newLocalClicks: number) => void
-  /** Callback when button is right-clicked. Receives the current click count. Does not increment or spawn particles. */
-  onRightClick?: (currentClicks: number) => void
+  /**
+   * Callback when button is clicked.
+   * @param clicks - The current click count, after increment
+   * @param event - The mouse event that triggered the click
+   */
+  onClick?: (clicks: number, event: React.MouseEvent<HTMLButtonElement>) => void
+  /**
+   * Callback when button is right-clicked. Also triggered by Shift+Enter for keyboard accessibility.
+   * @param clicks - The current click count, not incremented as right-click does not increment
+   * @param event - The mouse or keyboard event that triggered the action
+   */
+  onRightClick?: (
+    clicks: number,
+    event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
+  ) => void
   /** Whether the button is disabled */
   disabled?: boolean
   /** Show particle effects on click */
@@ -131,14 +142,14 @@ export interface UseLikeButtonReturn {
   /** Active particles to render */
   particles: ParticleData[]
   /** Click handler for the button */
-  handleClick: () => void
+  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void
   /** Right-click handler for the button */
-  handleRightClick: (e: React.MouseEvent) => void
+  handleRightClick: (e: React.MouseEvent<HTMLButtonElement>) => void
   /**
    * Keyboard handler for accessibility.
    * Triggers onRightClick when Shift+Enter is pressed.
    */
-  handleKeyDown: (e: React.KeyboardEvent) => void
+  handleKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => void
   /** Aria label for accessibility */
   ariaLabel: string
   /** Whether button has been pressed */
@@ -155,7 +166,11 @@ export interface UseLikeButtonReturn {
  * ```tsx
  * const { handleClick, localClicks, particles, ariaLabel } = useLikeButton({
  *   maxClicks: 10,
- *   onClick: (clicks) => console.log('Clicked!', clicks),
+ *   onClick: (clicks, event) => {
+ *     console.log('Clicked!', clicks)
+ *     // Access event if needed
+ *     event.stopPropagation()
+ *   },
  * });
  * ```
  */
@@ -234,28 +249,31 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     timeoutRefs.current.add(timeoutId)
   }, [showParticles, particlePreset, particleConfig])
 
-  const handleClick = useCallback(() => {
-    if (disabled) return
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (disabled) return
 
-    const newLocalClicks = localClicks + 1
+      const newLocalClicks = localClicks + 1
 
-    // Update internal state if in uncontrolled mode
-    if (externalLocalClicks === undefined) {
-      setInternalLocalClicks(newLocalClicks)
-    }
+      // Update internal state if in uncontrolled mode
+      if (externalLocalClicks === undefined) {
+        setInternalLocalClicks(newLocalClicks)
+      }
 
-    spawnParticles()
-    onClick?.(newLocalClicks)
-  }, [disabled, localClicks, externalLocalClicks, spawnParticles, onClick])
+      spawnParticles()
+      onClick?.(newLocalClicks, e)
+    },
+    [disabled, localClicks, externalLocalClicks, spawnParticles, onClick],
+  )
 
   const handleRightClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault() // Prevent context menu
       if (disabled) return
 
       // Right-click does not increment clicks or spawn particles
       // It only calls the callback with the current click count
-      onRightClick?.(localClicks)
+      onRightClick?.(localClicks, e)
     },
     [disabled, localClicks, onRightClick],
   )
@@ -265,11 +283,11 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
    * Shift+Enter triggers the right-click action as a keyboard alternative.
    */
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
+    (e: React.KeyboardEvent<HTMLButtonElement>) => {
       if (e.shiftKey && e.key === "Enter") {
         e.preventDefault()
         if (disabled) return
-        onRightClick?.(localClicks)
+        onRightClick?.(localClicks, e)
       }
     },
     [disabled, localClicks, onRightClick],

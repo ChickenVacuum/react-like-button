@@ -126,7 +126,7 @@ describe("LikeButton", () => {
       const button = screen.getByRole("button")
       fireEvent.click(button)
 
-      expect(onClick).toHaveBeenCalledWith(1)
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
     })
 
     it("should increment clicks on each click", () => {
@@ -139,7 +139,7 @@ describe("LikeButton", () => {
       fireEvent.click(button)
 
       expect(onClick).toHaveBeenCalledTimes(3)
-      expect(onClick).toHaveBeenLastCalledWith(3)
+      expect(onClick).toHaveBeenLastCalledWith(3, expect.any(Object))
     })
 
     it("should stop responding after maxClicks", () => {
@@ -173,7 +173,7 @@ describe("LikeButton", () => {
       const button = screen.getByRole("button")
       fireEvent.contextMenu(button)
 
-      expect(onRightClick).toHaveBeenCalledWith(0)
+      expect(onRightClick).toHaveBeenCalledWith(0, expect.any(Object))
     })
 
     it("should not increment clicks on right-click", () => {
@@ -187,15 +187,15 @@ describe("LikeButton", () => {
 
       // Right-click should not increment
       expect(onRightClick).toHaveBeenCalledTimes(2)
-      expect(onRightClick).toHaveBeenLastCalledWith(0)
+      expect(onRightClick).toHaveBeenLastCalledWith(0, expect.any(Object))
 
       // Now click once
       fireEvent.click(button)
-      expect(onClick).toHaveBeenCalledWith(1)
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
 
       // Right-click should show updated count
       fireEvent.contextMenu(button)
-      expect(onRightClick).toHaveBeenLastCalledWith(1)
+      expect(onRightClick).toHaveBeenLastCalledWith(1, expect.any(Object))
     })
 
     it("should not call onRightClick when disabled", () => {
@@ -217,7 +217,7 @@ describe("LikeButton", () => {
       const button = screen.getByRole("button")
       fireEvent.keyDown(button, { key: "Enter", shiftKey: true })
 
-      expect(onRightClick).toHaveBeenCalledWith(0)
+      expect(onRightClick).toHaveBeenCalledWith(0, expect.any(Object))
     })
 
     it("should not trigger onRightClick with Enter only (no Shift)", () => {
@@ -268,7 +268,7 @@ describe("LikeButton", () => {
       // Then use Shift+Enter
       fireEvent.keyDown(button, { key: "Enter", shiftKey: true })
 
-      expect(onRightClick).toHaveBeenCalledWith(2)
+      expect(onRightClick).toHaveBeenCalledWith(2, expect.any(Object))
     })
   })
 
@@ -320,7 +320,7 @@ describe("LikeButton", () => {
       fireEvent.click(button)
 
       // Should report 6 (5 + 1)
-      expect(onClick).toHaveBeenCalledWith(6)
+      expect(onClick).toHaveBeenCalledWith(6, expect.any(Object))
     })
 
     it("should be disabled when external localClicks equals maxClicks", () => {
@@ -908,7 +908,7 @@ describe("LikeButton", () => {
 
       ref.current?.click()
 
-      expect(onClick).toHaveBeenCalledWith(1)
+      expect(onClick).toHaveBeenCalledWith(1, expect.any(Object))
     })
   })
 })

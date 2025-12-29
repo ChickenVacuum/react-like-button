@@ -34,7 +34,7 @@ const MAX_FILL_HEIGHT = 85
  * @example
  * ```tsx
  * // Default heart button
- * <LikeButton onClick={(clicks) => console.log('Clicks:', clicks)} />
+ * <LikeButton onClick={(clicks, event) => console.log('Clicks:', clicks)} />
  *
  * // Custom icon
  * <LikeButton renderIcon={({ size }) => <CustomIcon size={size} />} />
