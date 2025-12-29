@@ -1,7 +1,8 @@
 import { act, renderHook } from "@testing-library/react"
 import type React from "react"
-import { describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { LIKE_BUTTON_DEFAULTS, useLikeButton } from "../useLikeButton"
+import { PARTICLE_CLEANUP_BUFFER_MS } from "../utils"
 
 // Helper to create mock mouse event for handleClick
 const createMockMouseEvent = () => ({}) as React.MouseEvent<HTMLButtonElement>
@@ -606,6 +607,220 @@ describe("useLikeButton", () => {
         localClicks: 2,
         maxClicks: 5,
       })
+    })
+  })
+
+  describe("particle cleanup", () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    it("should remove particles after animation completes", () => {
+      const speed = 500
+      const { result } = renderHook(() => useLikeButton({ particleConfig: { speed, count: 3 } }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(result.current.particles).toHaveLength(3)
+
+      // Advance time past animation duration + buffer
+      act(() => {
+        vi.advanceTimersByTime(speed + PARTICLE_CLEANUP_BUFFER_MS + 1)
+      })
+
+      expect(result.current.particles).toHaveLength(0)
+    })
+
+    it("should accumulate particles from multiple rapid clicks", () => {
+      const speed = 1000
+      const { result } = renderHook(() =>
+        useLikeButton({ particleConfig: { speed, count: 2 }, maxClicks: 10 }),
+      )
+
+      // Click rapidly multiple times
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      // All particles should be present
+      expect(result.current.particles).toHaveLength(6)
+    })
+
+    it("should cleanup timeouts on unmount to prevent memory leaks", () => {
+      const speed = 500
+      const { result, unmount } = renderHook(() =>
+        useLikeButton({ particleConfig: { speed, count: 3 } }),
+      )
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(result.current.particles).toHaveLength(3)
+
+      // Unmount before timeout fires
+      unmount()
+
+      // Advancing timers should not cause errors (no setState on unmounted)
+      expect(() => {
+        act(() => {
+          vi.advanceTimersByTime(speed + PARTICLE_CLEANUP_BUFFER_MS + 1)
+        })
+      }).not.toThrow()
+    })
+  })
+
+  describe("edge cases", () => {
+    it("should handle maxClicks of 0 (immediately disabled)", () => {
+      const onClick = vi.fn()
+      const { result } = renderHook(() => useLikeButton({ maxClicks: 0, onClick }))
+
+      expect(result.current.isMaxed).toBe(true)
+      expect(result.current.disabled).toBe(true)
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(onClick).not.toHaveBeenCalled()
+    })
+
+    it("should handle localClicks exceeding maxClicks in controlled mode", () => {
+      const { result } = renderHook(() => useLikeButton({ localClicks: 15, maxClicks: 10 }))
+
+      expect(result.current.isMaxed).toBe(true)
+      expect(result.current.disabled).toBe(true)
+      expect(result.current.fillPercentage).toBe(150) // 15/10 * 100
+    })
+
+    it("should handle negative localClicks in controlled mode", () => {
+      const { result } = renderHook(() => useLikeButton({ localClicks: -5, maxClicks: 10 }))
+
+      expect(result.current.localClicks).toBe(-5)
+      expect(result.current.isMaxed).toBe(false)
+      expect(result.current.fillPercentage).toBe(-50)
+    })
+
+    it("should handle very large maxClicks value", () => {
+      const { result } = renderHook(() => useLikeButton({ maxClicks: 1000000 }))
+
+      act(() => {
+        result.current.handleClick(createMockMouseEvent())
+      })
+
+      expect(result.current.localClicks).toBe(1)
+      expect(result.current.fillPercentage).toBeCloseTo(0.0001)
+      expect(result.current.isMaxed).toBe(false)
+    })
+  })
+
+  describe("handleRightClick behavior", () => {
+    it("should call preventDefault on the event", () => {
+      const { result } = renderHook(() => useLikeButton())
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+      } as unknown as React.MouseEvent<HTMLButtonElement>
+
+      act(() => {
+        result.current.handleRightClick(mockEvent)
+      })
+
+      expect(mockEvent.preventDefault).toHaveBeenCalled()
+    })
+
+    it("should call preventDefault even when no onRightClick handler provided", () => {
+      const { result } = renderHook(() => useLikeButton())
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+      } as unknown as React.MouseEvent<HTMLButtonElement>
+
+      act(() => {
+        result.current.handleRightClick(mockEvent)
+      })
+
+      // preventDefault should still be called to prevent context menu
+      expect(mockEvent.preventDefault).toHaveBeenCalled()
+    })
+
+    it("should call preventDefault even when disabled", () => {
+      const { result } = renderHook(() => useLikeButton({ disabled: true }))
+
+      const mockEvent = {
+        preventDefault: vi.fn(),
+      } as unknown as React.MouseEvent<HTMLButtonElement>
+
+      act(() => {
+        result.current.handleRightClick(mockEvent)
+      })
+
+      // preventDefault is called before the disabled check
+      expect(mockEvent.preventDefault).toHaveBeenCalled()
+    })
+  })
+
+  describe("re-render with changed props", () => {
+    it("should update isMaxed when maxClicks changes", () => {
+      const { result, rerender } = renderHook(({ maxClicks }) => useLikeButton({ maxClicks }), {
+        initialProps: { maxClicks: 10 },
+      })
+
+      // Click 5 times
+      for (let i = 0; i < 5; i++) {
+        act(() => {
+          result.current.handleClick(createMockMouseEvent())
+        })
+      }
+
+      expect(result.current.isMaxed).toBe(false)
+      expect(result.current.localClicks).toBe(5)
+
+      // Change maxClicks to 5
+      rerender({ maxClicks: 5 })
+
+      expect(result.current.isMaxed).toBe(true)
+      expect(result.current.disabled).toBe(true)
+    })
+
+    it("should update disabled state when disabled prop changes", () => {
+      const { result, rerender } = renderHook(
+        ({ disabled }) => useLikeButton({ disabled, maxClicks: 10 }),
+        { initialProps: { disabled: false } },
+      )
+
+      expect(result.current.disabled).toBe(false)
+
+      rerender({ disabled: true })
+
+      expect(result.current.disabled).toBe(true)
+    })
+
+    it("should reflect external localClicks changes in controlled mode", () => {
+      const { result, rerender } = renderHook(
+        ({ localClicks }) => useLikeButton({ localClicks, maxClicks: 10 }),
+        { initialProps: { localClicks: 0 } },
+      )
+
+      expect(result.current.localClicks).toBe(0)
+      expect(result.current.fillPercentage).toBe(0)
+
+      rerender({ localClicks: 7 })
+
+      expect(result.current.localClicks).toBe(7)
+      expect(result.current.fillPercentage).toBe(70)
     })
   })
 })
