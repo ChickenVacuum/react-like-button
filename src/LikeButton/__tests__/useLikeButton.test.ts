@@ -111,7 +111,9 @@ describe("useLikeButton", () => {
       const onRightClick = vi.fn()
       const { result } = renderHook(() => useLikeButton({ onRightClick }))
 
-      const mockEvent = { preventDefault: vi.fn() } as unknown as React.MouseEvent
+      const mockEvent = {
+        preventDefault: vi.fn(),
+      } as unknown as React.MouseEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleRightClick(mockEvent)
@@ -126,7 +128,9 @@ describe("useLikeButton", () => {
       const onRightClick = vi.fn()
       const { result } = renderHook(() => useLikeButton({ onRightClick, disabled: true }))
 
-      const mockEvent = { preventDefault: vi.fn() } as unknown as React.MouseEvent
+      const mockEvent = {
+        preventDefault: vi.fn(),
+      } as unknown as React.MouseEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleRightClick(mockEvent)
@@ -163,7 +167,7 @@ describe("useLikeButton", () => {
         shiftKey: false,
         key: "Enter",
         preventDefault: vi.fn(),
-      } as unknown as React.KeyboardEvent
+      } as unknown as React.KeyboardEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleKeyDown(mockEvent)
@@ -181,7 +185,7 @@ describe("useLikeButton", () => {
         shiftKey: true,
         key: "Space",
         preventDefault: vi.fn(),
-      } as unknown as React.KeyboardEvent
+      } as unknown as React.KeyboardEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleKeyDown(mockEvent)
@@ -199,7 +203,7 @@ describe("useLikeButton", () => {
         shiftKey: true,
         key: "Enter",
         preventDefault: vi.fn(),
-      } as unknown as React.KeyboardEvent
+      } as unknown as React.KeyboardEvent<HTMLButtonElement>
 
       act(() => {
         result.current.handleKeyDown(mockEvent)
