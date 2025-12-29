@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import type { ParticleConfig, ParticlePreset, ParticleShape } from "../Particle/types"
 import {
   normalizeRange,
@@ -122,6 +122,19 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
   const [internalLocalClicks, setInternalLocalClicks] = useState(0)
   const [particles, setParticles] = useState<ParticleData[]>([])
 
+  // Track active timeout IDs for cleanup on unmount
+  const timeoutRefs = useRef<Set<ReturnType<typeof setTimeout>>>(new Set())
+
+  // Cleanup all pending timeouts on unmount to prevent memory leaks
+  // and "setState on unmounted component" warnings
+  useEffect(() => {
+    return () => {
+      for (const timeoutId of timeoutRefs.current) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [])
+
   // Use external state if provided, otherwise use internal
   const localClicks = externalLocalClicks ?? internalLocalClicks
   const isMaxed = localClicks >= maxClicks
@@ -158,9 +171,13 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     const cleanupDelay = config.speed + 100
     // Use Set for O(1) lookup instead of O(n) find() - avoids O(n²) filter
     const idsToRemove = new Set(newParticles.map((p) => p.id))
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setParticles((prev) => prev.filter((p) => !idsToRemove.has(p.id)))
+      // Remove from tracking set after completion
+      timeoutRefs.current.delete(timeoutId)
     }, cleanupDelay)
+    // Track timeout for cleanup on unmount
+    timeoutRefs.current.add(timeoutId)
   }, [showParticles, particlePreset, particleConfig])
 
   const handleClick = useCallback(() => {
