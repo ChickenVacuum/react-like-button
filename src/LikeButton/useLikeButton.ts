@@ -20,6 +20,39 @@ export interface ParticleData {
   fadeOut: boolean
 }
 
+/**
+ * State object passed to dynamic aria-label functions.
+ * Enables internationalization (i18n) support for accessibility labels.
+ */
+export interface AriaLabelState {
+  /** Whether the maximum clicks have been reached */
+  isMaxed: boolean
+  /** Number of clicks remaining before max */
+  remaining: number
+  /** Current number of clicks by the user */
+  localClicks: number
+  /** Maximum number of clicks allowed */
+  maxClicks: number
+}
+
+/**
+ * Aria label can be either:
+ * - A static string for simple use cases
+ * - A function that receives state for dynamic/i18n labels
+ *
+ * @example
+ * ```tsx
+ * // Static string
+ * ariaLabel="Like this post"
+ *
+ * // Dynamic function for i18n
+ * ariaLabel={({ isMaxed, remaining }) =>
+ *   isMaxed ? t('likes.maxed') : t('likes.remaining', { count: remaining })
+ * }
+ * ```
+ */
+export type AriaLabelProp = string | ((state: AriaLabelState) => string)
+
 /** Options for the useLikeButton hook */
 export interface UseLikeButtonOptions {
   /** Number of clicks by current user (controlled mode). If not provided, internal state is used. */
@@ -34,8 +67,22 @@ export interface UseLikeButtonOptions {
   disabled?: boolean
   /** Show particle effects on click */
   showParticles?: boolean
-  /** Custom aria-label override */
-  ariaLabel?: string
+  /**
+   * Custom aria-label override. Accepts either a static string or a function
+   * that receives the current state for dynamic/i18n labels.
+   *
+   * @example
+   * ```tsx
+   * // Static string
+   * ariaLabel="Like this post"
+   *
+   * // Dynamic function for i18n support
+   * ariaLabel={({ isMaxed, remaining }) =>
+   *   isMaxed ? t('likes.maxed') : t('likes.remaining', { count: remaining })
+   * }
+   * ```
+   */
+  ariaLabel?: AriaLabelProp
 
   // ========== PARTICLE CONFIGURATION ==========
   /**
@@ -234,6 +281,21 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     ? "Thank you for your likes!"
     : `Like this content. ${maxClicks - localClicks} clicks remaining`
 
+  // Compute aria label - support both static string and dynamic function
+  const ariaLabelState: AriaLabelState = {
+    isMaxed,
+    remaining: maxClicks - localClicks,
+    localClicks,
+    maxClicks,
+  }
+
+  const computedAriaLabel =
+    customAriaLabel === undefined
+      ? defaultAriaLabel
+      : typeof customAriaLabel === "function"
+        ? customAriaLabel(ariaLabelState)
+        : customAriaLabel
+
   return {
     localClicks,
     isMaxed,
@@ -243,7 +305,7 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     handleClick,
     handleRightClick,
     handleKeyDown,
-    ariaLabel: customAriaLabel ?? defaultAriaLabel,
+    ariaLabel: computedAriaLabel,
     isPressed: localClicks > 0,
     hasRightClickAction: onRightClick !== undefined,
   }

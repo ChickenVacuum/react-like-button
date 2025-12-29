@@ -42,6 +42,8 @@ export type {
 
 // Headless hook types
 export type {
+  AriaLabelProp,
+  AriaLabelState,
   ParticleData,
   UseLikeButtonOptions,
   UseLikeButtonReturn,
