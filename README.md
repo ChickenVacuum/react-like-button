@@ -5,9 +5,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-| Custom hearth with on complete state | Classic button | Like shaped cursor | Gold stars particle |
+| Custom heart with on complete state | Classic button | Like shaped cursor | Gold stars particle |
 |--------|--------|--------|--------|
-| ![Full hearth SVG](docs/header_demos/like_button_hearth_svg.gif) | ![Round with sparks](docs/header_demos/like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/like_button_square_star.gif) |
+| ![Full heart SVG](docs/header_demos/like_button_heart_svg.gif) | ![Round with sparks](docs/header_demos/like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/like_button_square_star.gif) |
 
 _(The gifs are accelerated and chopped, the effects would render better in real life)_
 
@@ -364,7 +364,7 @@ The particle system is optimized for performance:
 - ARIA labels for screen readers
 - Keyboard support (Enter/Space to click)
 - Particles marked as decorative (`aria-hidden="true"`)
-- Respects `prefers-reduced-motion` (particles disabled)
+- Shift+Enter triggers right-click action for keyboard users
 
 ## TypeScript
 
