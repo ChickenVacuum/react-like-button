@@ -58,6 +58,12 @@ export type AriaLabelProp = string | ((state: AriaLabelState) => string)
 export interface UseLikeButtonOptions {
   /** Current click count (controlled mode). If not provided, internal state is used. */
   clicks?: number
+  /**
+   * Initial click count for uncontrolled mode.
+   * Only used on first render; ignored if `clicks` prop is provided.
+   * @default 0
+   */
+  defaultClicks?: number
   /** Maximum number of clicks allowed per user */
   maxClicks?: number
   /**
@@ -188,6 +194,7 @@ export interface UseLikeButtonReturn {
 export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButtonReturn {
   const {
     clicks: externalClicks,
+    defaultClicks = 0,
     maxClicks = LIKE_BUTTON_DEFAULTS.maxClicks,
     onClick,
     onChange,
@@ -199,8 +206,15 @@ export function useLikeButton(options: UseLikeButtonOptions = {}): UseLikeButton
     ariaLabel: customAriaLabel,
   } = options
 
-  // Internal state for uncontrolled mode
-  const [internalClicks, setInternalClicks] = useState(0)
+  // Warn if both controlled and default values are provided
+  if (externalClicks !== undefined && options.defaultClicks !== undefined) {
+    console.warn(
+      "LikeButton: `defaultClicks` is ignored when `clicks` is provided (controlled mode).",
+    )
+  }
+
+  // Internal state for uncontrolled mode (initialized with defaultClicks)
+  const [internalClicks, setInternalClicks] = useState(defaultClicks)
   const [particles, setParticles] = useState<ParticleData[]>([])
 
   // Track active timeout IDs for cleanup on unmount

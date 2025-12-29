@@ -132,11 +132,18 @@ Start with a preset and override specific properties:
 ### Click Tracking
 
 ```tsx
-<LikeButton 
+<LikeButton
   maxClicks={10}
   onClick={(clicks) => console.log('Clicks:', clicks)}
   onRightClick={(clicks) => console.log('Right click at:', clicks)}
 />
+```
+
+### Uncontrolled with Initial Value
+
+```tsx
+// Start with 3 clicks already filled
+<LikeButton defaultClicks={3} maxClicks={10} />
 ```
 
 ### Controlled Mode
@@ -282,6 +289,7 @@ const customDiamond: CustomParticleShape = {
 | `waveColor` | `string` | `fillColor` | Wave color (defaults to fillColor) |
 | `maxClicks` | `number` | `Infinity` | Maximum number of clicks allowed |
 | `clicks` | `number` | - | Controlled mode: current click count |
+| `defaultClicks` | `number` | `0` | Initial clicks for uncontrolled mode |
 | `onChange` | `(clicks: number) => void` | - | Called with new count (ideal for `setClicks`) |
 | `onClick` | `(clicks: number, event) => void` | - | Click handler with event access |
 | `onRightClick` | `(clicks: number, event) => void` | - | Right-click handler |
