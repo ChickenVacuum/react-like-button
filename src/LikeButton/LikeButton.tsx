@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react"
+import { forwardRef, useId, useMemo } from "react"
 import { Particle } from "../Particle/Particle"
 import { DefaultHeartIcon } from "./DefaultHeartIcon"
 import type { LikeButtonProps } from "./types"
@@ -87,19 +87,22 @@ const MAX_FILL_HEIGHT = 85
  * }} />
  * ```
  */
-export function LikeButton({
-  size = LIKE_BUTTON_DEFAULTS.size,
-  fillColor = LIKE_BUTTON_DEFAULTS.fillColor,
-  waveColor = LIKE_BUTTON_DEFAULTS.waveColor,
-  className = "",
-  showParticles = true,
-  renderIcon,
-  shape = "circle",
-  styles = {},
-  cursor = "heart",
-  minFillPercent = 0,
-  ...hookOptions
-}: LikeButtonProps) {
+export const LikeButton = forwardRef<HTMLButtonElement, LikeButtonProps>(function LikeButton(
+  {
+    size = LIKE_BUTTON_DEFAULTS.size,
+    fillColor = LIKE_BUTTON_DEFAULTS.fillColor,
+    waveColor = LIKE_BUTTON_DEFAULTS.waveColor,
+    className = "",
+    showParticles = true,
+    renderIcon,
+    shape = "circle",
+    styles = {},
+    cursor = "heart",
+    minFillPercent = 0,
+    ...hookOptions
+  },
+  ref,
+) {
   // Clamp minFillPercent to valid range (0-85)
   const clampedMinFill = Math.max(0, Math.min(MAX_FILL_HEIGHT, minFillPercent))
   // Hooks must be called first and in consistent order
@@ -165,6 +168,7 @@ export function LikeButton({
   return (
     <div className={WRAPPER_CLASSES}>
       <button
+        ref={ref}
         id={buttonId}
         data-like-button
         type="button"
@@ -242,6 +246,6 @@ export function LikeButton({
       )}
     </div>
   )
-}
+})
 
 export default LikeButton

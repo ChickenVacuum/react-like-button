@@ -1,4 +1,4 @@
-import { useId, useMemo } from "react"
+import { forwardRef, useId, useMemo } from "react"
 import { ParticleVanilla } from "../Particle/Particle.vanilla"
 import { DefaultHeartIcon } from "./DefaultHeartIcon"
 import type { IconRenderProps, LikeButtonVanillaProps } from "./types"
@@ -66,154 +66,160 @@ const MAX_FILL_HEIGHT = 85
  * />
  * ```
  */
-export function LikeButtonVanilla({
-  size = LIKE_BUTTON_DEFAULTS.size,
-  fillColor = LIKE_BUTTON_DEFAULTS.fillColor,
-  waveColor = LIKE_BUTTON_DEFAULTS.waveColor,
-  className = "",
-  showParticles = true,
-  renderIcon,
-  shape = "circle",
-  styles = {},
-  cursor = "heart",
-  minFillPercent = 0,
-  ...hookOptions
-}: LikeButtonVanillaProps) {
-  // Clamp minFillPercent to valid range (0-85)
-  const clampedMinFill = Math.max(0, Math.min(MAX_FILL_HEIGHT, minFillPercent))
-  // Hooks must be called first and in consistent order
-  const reactId = useId()
-  const buttonId = `like-button${reactId.replace(/:/g, "-")}`
+export const LikeButtonVanilla = forwardRef<HTMLButtonElement, LikeButtonVanillaProps>(
+  function LikeButtonVanilla(
+    {
+      size = LIKE_BUTTON_DEFAULTS.size,
+      fillColor = LIKE_BUTTON_DEFAULTS.fillColor,
+      waveColor = LIKE_BUTTON_DEFAULTS.waveColor,
+      className = "",
+      showParticles = true,
+      renderIcon,
+      shape = "circle",
+      styles = {},
+      cursor = "heart",
+      minFillPercent = 0,
+      ...hookOptions
+    },
+    ref,
+  ) {
+    // Clamp minFillPercent to valid range (0-85)
+    const clampedMinFill = Math.max(0, Math.min(MAX_FILL_HEIGHT, minFillPercent))
+    // Hooks must be called first and in consistent order
+    const reactId = useId()
+    const buttonId = `like-button${reactId.replace(/:/g, "-")}`
 
-  const {
-    handleClick,
-    handleRightClick,
-    handleKeyDown,
-    disabled,
-    ariaLabel,
-    isPressed,
-    isMaxed,
-    fillPercentage,
-    particles,
-    hasRightClickAction,
-  } = useLikeButton({ showParticles, ...hookOptions })
+    const {
+      handleClick,
+      handleRightClick,
+      handleKeyDown,
+      disabled,
+      ariaLabel,
+      isPressed,
+      isMaxed,
+      fillPercentage,
+      particles,
+      hasRightClickAction,
+    } = useLikeButton({ showParticles, ...hookOptions })
 
-  // Memoize style computations
-  const mergedStyles = useMemo(() => ({ ...DEFAULT_STYLES, ...styles }), [styles])
+    // Memoize style computations
+    const mergedStyles = useMemo(() => ({ ...DEFAULT_STYLES, ...styles }), [styles])
 
-  const shapeStyles = useMemo(() => getShapeStyles(shape), [shape])
+    const shapeStyles = useMemo(() => getShapeStyles(shape), [shape])
 
-  const buttonStyle = useMemo(
-    () => computeButtonStyles(size, mergedStyles, shapeStyles),
-    [size, mergedStyles, shapeStyles],
-  )
-
-  const hoverShadowOffset = useMemo(
-    () => computeHoverOffset(mergedStyles.shadowOffset),
-    [mergedStyles.shadowOffset],
-  )
-
-  // CSS custom properties for hover/active states (no <style> tag needed)
-  const hoverActiveVars = useMemo(
-    () => computeHoverActiveVars(hoverShadowOffset, mergedStyles),
-    [hoverShadowOffset, mergedStyles],
-  )
-
-  // Cursor style (not-allowed when disabled)
-  const cursorStyle = useMemo(
-    () => (disabled ? "not-allowed" : getCursorStyle(cursor)),
-    [cursor, disabled],
-  )
-
-  // Icon configuration
-  const iconSize = size * 0.5
-  const iconRenderProps: IconRenderProps = {
-    size: iconSize,
-    className: "like-button__icon",
-    isMaxed,
-    fillPercentage,
-  }
-
-  const renderedIcon =
-    renderIcon === null ? null : renderIcon === undefined ? (
-      <DefaultHeartIcon {...iconRenderProps} />
-    ) : (
-      renderIcon(iconRenderProps)
+    const buttonStyle = useMemo(
+      () => computeButtonStyles(size, mergedStyles, shapeStyles),
+      [size, mergedStyles, shapeStyles],
     )
 
-  return (
-    <div className="like-button-container">
-      <button
-        id={buttonId}
-        type="button"
-        onClick={handleClick}
-        onContextMenu={handleRightClick}
-        onKeyDown={handleKeyDown}
-        disabled={disabled}
-        aria-label={ariaLabel}
-        aria-pressed={isPressed}
-        aria-disabled={disabled}
-        aria-keyshortcuts={hasRightClickAction ? "Shift+Enter" : undefined}
-        style={{ ...buttonStyle, ...hoverActiveVars, cursor: cursorStyle }}
-        className={`like-button ${className}`.trim()}
-      >
-        {/* Liquid Fill Container */}
-        <div
-          className="like-button__fill"
-          style={{
-            backgroundColor: fillColor,
-            height: isMaxed
-              ? "100%"
-              : `${clampedMinFill + (fillPercentage / 100) * (MAX_FILL_HEIGHT - clampedMinFill)}%`,
-          }}
+    const hoverShadowOffset = useMemo(
+      () => computeHoverOffset(mergedStyles.shadowOffset),
+      [mergedStyles.shadowOffset],
+    )
+
+    // CSS custom properties for hover/active states (no <style> tag needed)
+    const hoverActiveVars = useMemo(
+      () => computeHoverActiveVars(hoverShadowOffset, mergedStyles),
+      [hoverShadowOffset, mergedStyles],
+    )
+
+    // Cursor style (not-allowed when disabled)
+    const cursorStyle = useMemo(
+      () => (disabled ? "not-allowed" : getCursorStyle(cursor)),
+      [cursor, disabled],
+    )
+
+    // Icon configuration
+    const iconSize = size * 0.5
+    const iconRenderProps: IconRenderProps = {
+      size: iconSize,
+      className: "like-button__icon",
+      isMaxed,
+      fillPercentage,
+    }
+
+    const renderedIcon =
+      renderIcon === null ? null : renderIcon === undefined ? (
+        <DefaultHeartIcon {...iconRenderProps} />
+      ) : (
+        renderIcon(iconRenderProps)
+      )
+
+    return (
+      <div className="like-button-container">
+        <button
+          ref={ref}
+          id={buttonId}
+          type="button"
+          onClick={handleClick}
+          onContextMenu={handleRightClick}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          aria-label={ariaLabel}
+          aria-pressed={isPressed}
+          aria-disabled={disabled}
+          aria-keyshortcuts={hasRightClickAction ? "Shift+Enter" : undefined}
+          style={{ ...buttonStyle, ...hoverActiveVars, cursor: cursorStyle }}
+          className={`like-button ${className}`.trim()}
         >
-          {/* Wave 1 (Back Layer) */}
-          <div className="like-button__wave like-button__wave--back">
-            {[0, 1].map((i) => (
-              <svg
-                key={i}
-                className="like-button__wave-svg"
-                style={{ color: waveColor }}
-                viewBox="0 0 100 20"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path d="M0,10 Q25,0 50,10 T100,10 V20 H0 Z" />
-              </svg>
-            ))}
+          {/* Liquid Fill Container */}
+          <div
+            className="like-button__fill"
+            style={{
+              backgroundColor: fillColor,
+              height: isMaxed
+                ? "100%"
+                : `${clampedMinFill + (fillPercentage / 100) * (MAX_FILL_HEIGHT - clampedMinFill)}%`,
+            }}
+          >
+            {/* Wave 1 (Back Layer) */}
+            <div className="like-button__wave like-button__wave--back">
+              {[0, 1].map((i) => (
+                <svg
+                  key={i}
+                  className="like-button__wave-svg"
+                  style={{ color: waveColor }}
+                  viewBox="0 0 100 20"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path d="M0,10 Q25,0 50,10 T100,10 V20 H0 Z" />
+                </svg>
+              ))}
+            </div>
+
+            {/* Wave 2 (Front Layer) */}
+            <div className="like-button__wave like-button__wave--front">
+              {[0, 1].map((i) => (
+                <svg
+                  key={i}
+                  className="like-button__wave-svg"
+                  style={{ color: fillColor }}
+                  viewBox="0 0 100 20"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path d="M0,10 Q25,5 50,10 T100,10 V20 H0 Z" />
+                </svg>
+              ))}
+            </div>
           </div>
 
-          {/* Wave 2 (Front Layer) */}
-          <div className="like-button__wave like-button__wave--front">
-            {[0, 1].map((i) => (
-              <svg
-                key={i}
-                className="like-button__wave-svg"
-                style={{ color: fillColor }}
-                viewBox="0 0 100 20"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path d="M0,10 Q25,5 50,10 T100,10 V20 H0 Z" />
-              </svg>
+          {/* Icon (customizable via renderIcon prop) */}
+          {renderedIcon}
+        </button>
+
+        {/* Particles */}
+        {showParticles && (
+          <div className="like-button__particles" aria-hidden="true">
+            {particles.map((p) => (
+              <ParticleVanilla key={p.id} {...p} />
             ))}
           </div>
-        </div>
-
-        {/* Icon (customizable via renderIcon prop) */}
-        {renderedIcon}
-      </button>
-
-      {/* Particles */}
-      {showParticles && (
-        <div className="like-button__particles" aria-hidden="true">
-          {particles.map((p) => (
-            <ParticleVanilla key={p.id} {...p} />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
+        )}
+      </div>
+    )
+  },
+)
 
 export default LikeButtonVanilla
