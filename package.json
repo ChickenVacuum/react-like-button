@@ -22,6 +22,9 @@
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "tsup && cat src/LikeButton/LikeButton.vanilla.css src/Particle/Particle.vanilla.css > dist/styles.css",
     "dev": "tsup --watch",
