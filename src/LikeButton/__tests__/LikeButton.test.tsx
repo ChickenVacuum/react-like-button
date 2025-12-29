@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { createRef } from "react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { LikeButton } from "../LikeButton"
 import { getCursorStyle } from "../utils"
@@ -879,6 +880,35 @@ describe("LikeButton", () => {
 
       const particles = document.querySelectorAll('[aria-hidden="true"] > div')
       expect(particles.length).toBe(8)
+    })
+  })
+
+  describe("ref forwarding", () => {
+    it("should forward ref to the button element", () => {
+      const ref = createRef<HTMLButtonElement>()
+      render(<LikeButton ref={ref} />)
+
+      expect(ref.current).toBeInstanceOf(HTMLButtonElement)
+      expect(ref.current?.tagName).toBe("BUTTON")
+    })
+
+    it("should allow programmatic focus via ref", () => {
+      const ref = createRef<HTMLButtonElement>()
+      render(<LikeButton ref={ref} />)
+
+      ref.current?.focus()
+
+      expect(document.activeElement).toBe(ref.current)
+    })
+
+    it("should allow programmatic click via ref", () => {
+      const ref = createRef<HTMLButtonElement>()
+      const onClick = vi.fn()
+      render(<LikeButton ref={ref} onClick={onClick} />)
+
+      ref.current?.click()
+
+      expect(onClick).toHaveBeenCalledWith(1)
     })
   })
 })
