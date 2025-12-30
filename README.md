@@ -80,6 +80,16 @@ function App() {
 <LikeButton showParticles={false} />
 ```
 
+### Disable Wave Animation
+
+```tsx
+// Disable wave animation (flat fill color)
+<LikeButton showWaves={false} />
+
+// Disable both waves and particles for a minimal look
+<LikeButton showWaves={false} showParticles={false} />
+```
+
 ### Built-in Presets
 
 Choose from 5 designed particle effects:
@@ -306,6 +316,7 @@ const customDiamond: CustomParticleShape = {
 | `renderIcon` | `(props) => ReactNode` | - | Custom icon renderer |
 | `minFillPercent` | `number` | `5` | Minimum fill percentage |
 | `showParticles` | `boolean` | `true` | Enable/disable particle effects |
+| `showWaves` | `boolean` | `true` | Enable/disable wave animation on fill |
 | `particlePreset` | `ParticlePreset` | - | Particle effect preset |
 | `particleConfig` | `ParticleConfig` | - | Custom particle configuration |
 

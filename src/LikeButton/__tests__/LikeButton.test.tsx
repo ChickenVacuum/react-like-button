@@ -558,6 +558,45 @@ describe("LikeButton", () => {
     })
   })
 
+  describe("showWaves prop", () => {
+    it("should render wave elements by default", () => {
+      render(<LikeButton />)
+      const button = screen.getByRole("button")
+      const waves = button.querySelectorAll("svg[viewBox='0 0 100 20']")
+      expect(waves.length).toBeGreaterThan(0)
+    })
+
+    it("should not render wave elements when showWaves is false", () => {
+      render(<LikeButton showWaves={false} />)
+      const button = screen.getByRole("button")
+      const waves = button.querySelectorAll("svg[viewBox='0 0 100 20']")
+      expect(waves.length).toBe(0)
+    })
+
+    it("should still render fill container when showWaves is false", () => {
+      render(<LikeButton showWaves={false} clicks={5} maxClicks={10} />)
+      const button = screen.getByRole("button")
+      const fill = button.querySelector(".absolute.bottom-0")
+      expect(fill).toBeInTheDocument()
+    })
+
+    it("should still show particles when showWaves is false", () => {
+      render(<LikeButton showWaves={false} />)
+      fireEvent.click(screen.getByRole("button"))
+      expect(getParticleCount(PARTICLE_SELECTOR)).toBeGreaterThan(0)
+    })
+
+    it("should disable both waves and particles independently", () => {
+      render(<LikeButton showWaves={false} showParticles={false} />)
+      const button = screen.getByRole("button")
+      const waves = button.querySelectorAll("svg[viewBox='0 0 100 20']")
+      expect(waves.length).toBe(0)
+
+      fireEvent.click(button)
+      expect(getParticleCount(PARTICLE_SELECTOR)).toBe(0)
+    })
+  })
+
   describe("particle presets", () => {
     PARTICLE_PRESETS.forEach(({ name, expectedCount }) => {
       it(`should render with ${name} preset`, () => {

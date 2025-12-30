@@ -84,6 +84,12 @@ export interface BaseLikeButtonProps extends UseLikeButtonOptions {
   /** Additional CSS class name */
   className?: string
   /**
+   * Show animated wave effect on top of the liquid fill.
+   * When false, the fill displays as a flat color without wave animation.
+   * @default true
+   */
+  showWaves?: boolean
+  /**
    * Initial/minimum fill percentage shown even before any clicks.
    * Useful for custom shapes with narrow bottoms (e.g., hearts, diamonds)
    * where low fill percentages may be invisible.

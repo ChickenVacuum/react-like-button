@@ -73,6 +73,7 @@ export const LikeButtonVanilla = forwardRef<HTMLButtonElement, LikeButtonVanilla
       waveColor = LIKE_BUTTON_DEFAULTS.waveColor,
       className = "",
       showParticles = true,
+      showWaves = true,
       renderIcon,
       shape = "circle",
       styles = {},
@@ -171,37 +172,41 @@ export const LikeButtonVanilla = forwardRef<HTMLButtonElement, LikeButtonVanilla
                 : `${clampedMinFill + (fillPercentage / 100) * (MAX_FILL_HEIGHT - clampedMinFill)}%`,
             }}
           >
-            {/* Wave 1 (Back Layer) */}
-            <div className="like-button__wave like-button__wave--back">
-              {[0, 1].map((i) => (
-                <svg
-                  key={i}
-                  className="like-button__wave-svg"
-                  style={{ color: waveColor }}
-                  viewBox="0 0 100 20"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <path d="M0,10 Q25,0 50,10 T100,10 V20 H0 Z" />
-                </svg>
-              ))}
-            </div>
+            {showWaves && (
+              <>
+                {/* Wave 1 (Back Layer) */}
+                <div className="like-button__wave like-button__wave--back">
+                  {[0, 1].map((i) => (
+                    <svg
+                      key={i}
+                      className="like-button__wave-svg"
+                      style={{ color: waveColor }}
+                      viewBox="0 0 100 20"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <path d="M0,10 Q25,0 50,10 T100,10 V20 H0 Z" />
+                    </svg>
+                  ))}
+                </div>
 
-            {/* Wave 2 (Front Layer) */}
-            <div className="like-button__wave like-button__wave--front">
-              {[0, 1].map((i) => (
-                <svg
-                  key={i}
-                  className="like-button__wave-svg"
-                  style={{ color: fillColor }}
-                  viewBox="0 0 100 20"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <path d="M0,10 Q25,5 50,10 T100,10 V20 H0 Z" />
-                </svg>
-              ))}
-            </div>
+                {/* Wave 2 (Front Layer) */}
+                <div className="like-button__wave like-button__wave--front">
+                  {[0, 1].map((i) => (
+                    <svg
+                      key={i}
+                      className="like-button__wave-svg"
+                      style={{ color: fillColor }}
+                      viewBox="0 0 100 20"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <path d="M0,10 Q25,5 50,10 T100,10 V20 H0 Z" />
+                    </svg>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Icon (customizable via renderIcon prop) */}
