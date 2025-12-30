@@ -96,6 +96,7 @@ export const LikeButton = forwardRef<HTMLButtonElement, LikeButtonProps>(functio
     waveColor = LIKE_BUTTON_DEFAULTS.waveColor,
     className = "",
     showParticles = true,
+    showWaves = true,
     renderIcon,
     shape = "circle",
     styles = {},
@@ -195,43 +196,47 @@ export const LikeButton = forwardRef<HTMLButtonElement, LikeButtonProps>(functio
               : `${clampedMinFill + (fillPercentage / 100) * (MAX_FILL_HEIGHT - clampedMinFill)}%`,
           }}
         >
-          {/* Wave 1 (Back Layer) */}
-          <div
-            className={WAVE_CONTAINER_CLASSES}
-            style={{ animation: `wave-scroll-left ${WAVE_BACK_DURATION_S}s linear infinite` }}
-          >
-            {[0, 1].map((i) => (
-              <svg
-                key={i}
-                className={WAVE_SVG_CLASSES}
-                style={{ color: waveColor }}
-                viewBox="0 0 100 20"
-                preserveAspectRatio="none"
-                aria-hidden="true"
+          {showWaves && (
+            <>
+              {/* Wave 1 (Back Layer) */}
+              <div
+                className={WAVE_CONTAINER_CLASSES}
+                style={{ animation: `wave-scroll-left ${WAVE_BACK_DURATION_S}s linear infinite` }}
               >
-                <path d="M0,10 Q25,0 50,10 T100,10 V20 H0 Z" />
-              </svg>
-            ))}
-          </div>
+                {[0, 1].map((i) => (
+                  <svg
+                    key={i}
+                    className={WAVE_SVG_CLASSES}
+                    style={{ color: waveColor }}
+                    viewBox="0 0 100 20"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M0,10 Q25,0 50,10 T100,10 V20 H0 Z" />
+                  </svg>
+                ))}
+              </div>
 
-          {/* Wave 2 (Front Layer) */}
-          <div
-            className={WAVE_CONTAINER_CLASSES}
-            style={{ animation: `wave-scroll-right ${WAVE_FRONT_DURATION_S}s linear infinite` }}
-          >
-            {[0, 1].map((i) => (
-              <svg
-                key={i}
-                className={WAVE_SVG_CLASSES}
-                style={{ color: fillColor }}
-                viewBox="0 0 100 20"
-                preserveAspectRatio="none"
-                aria-hidden="true"
+              {/* Wave 2 (Front Layer) */}
+              <div
+                className={WAVE_CONTAINER_CLASSES}
+                style={{ animation: `wave-scroll-right ${WAVE_FRONT_DURATION_S}s linear infinite` }}
               >
-                <path d="M0,10 Q25,5 50,10 T100,10 V20 H0 Z" />
-              </svg>
-            ))}
-          </div>
+                {[0, 1].map((i) => (
+                  <svg
+                    key={i}
+                    className={WAVE_SVG_CLASSES}
+                    style={{ color: fillColor }}
+                    viewBox="0 0 100 20"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M0,10 Q25,5 50,10 T100,10 V20 H0 Z" />
+                  </svg>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Icon (customizable via renderIcon prop) */}
