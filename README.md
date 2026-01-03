@@ -9,11 +9,17 @@
 |--------|--------|--------|--------|
 | ![Full heart SVG](docs/header_demos/like_button_heart_svg.gif) | ![Round with sparks](docs/header_demos/like_button_round_sparks.gif) | ![Square with emeralds](docs/header_demos/like_button_square_emerald.gif) | ![Square with stars](docs/header_demos/like_button_square_star.gif) |
 
+| Dislike button round | Dislike button square |
+|--------|--------|
+| ![Dislike button round](docs/header_demos/dislike_button_round.gif) | ![Dislike button square](docs/header_demos/dislike_button_square.gif) |
+
+_(You can make any kind of reaction buttons really)_
+
 _(The gifs are accelerated and chopped, the effects would render better in real life)_
 
 Test it yourself: [StackBlitz Playground](https://stackblitz.com/edit/react-like-button-component?file=src%2FApp.tsx)
 
-An animated like button component with liquid fill effect and customizable particle animations. Available in both Tailwind CSS and vanilla CSS versions.
+An animated React like button component with configurable multi clicks to fill the button, particle animations on click, all customizable. Supports Tailwind CSS and vanilla CSS. TypeScript-ready and accessible.
 
 ## Features
 
