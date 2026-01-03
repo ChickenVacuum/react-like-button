@@ -36,11 +36,11 @@ An animated React like button component with configurable multi clicks to fill t
 ## Installation
 
 ```bash
-npm install @jepepa/like-button
+npm install @jepepa/react-like-button
 # or
-yarn add @jepepa/like-button
+yarn add @jepepa/react-like-button
 # or
-pnpm add @jepepa/like-button
+pnpm add @jepepa/react-like-button
 ```
 
 ## Quick Start
@@ -48,8 +48,8 @@ pnpm add @jepepa/like-button
 ### Tailwind CSS Version
 
 ```tsx
-import { LikeButton } from '@jepepa/like-button';
-import '@jepepa/like-button/like-button.css'; // Required for animations
+import { LikeButton } from '@jepepa/react-like-button';
+import '@jepepa/react-like-button/like-button.css'; // Required for animations
 
 function App() {
   return (
@@ -64,8 +64,8 @@ function App() {
 ### Vanilla CSS Version
 
 ```tsx
-import { LikeButtonVanilla } from '@jepepa/like-button';
-import '@jepepa/like-button/styles.css';
+import { LikeButtonVanilla } from '@jepepa/react-like-button';
+import '@jepepa/react-like-button/styles.css';
 
 function App() {
   return (
@@ -288,7 +288,7 @@ Gentle effect for favorites:
 Create custom particle shapes:
 
 ```tsx
-import type { CustomParticleShape } from '@jepepa/like-button';
+import type { CustomParticleShape } from '@jepepa/react-like-button';
 
 const customDiamond: CustomParticleShape = {
   render: ({ size, color, className }) => (
@@ -401,25 +401,25 @@ import type {
   IconRenderProps,          // Custom icon render function props
   ParticleConfig,           // Particle configuration
   CustomParticleShape,      // Custom particle shape
-} from '@jepepa/like-button';
+} from '@jepepa/react-like-button';
 
 // Hook types (for headless usage)
 import type {
   UseLikeButtonOptions,     // Hook options
   UseLikeButtonReturn,      // Hook return type
-} from '@jepepa/like-button';
+} from '@jepepa/react-like-button';
 
 // Shape and cursor types
 import type {
   Shape, ShapePreset, CustomShape,
   Cursor, CursorPreset, CustomCursor,
-} from '@jepepa/like-button';
+} from '@jepepa/react-like-button';
 
 // All particle types
 import type {
   ParticlePreset, ParticleShape, ParticleShapePreset,
   ParticleShapeProps, Range,
-} from '@jepepa/like-button';
+} from '@jepepa/react-like-button';
 ```
 
 ## Changelog
@@ -450,8 +450,8 @@ This also affects the `useLikeButton` hook:
 The Tailwind CSS version now requires importing a CSS file for animations and hover effects to work:
 
 ```tsx
-import { LikeButton } from '@jepepa/like-button';
-import '@jepepa/like-button/like-button.css'; // NEW - Required
+import { LikeButton } from '@jepepa/react-like-button';
+import '@jepepa/react-like-button/like-button.css'; // NEW - Required
 ```
 
 **What changed:**
@@ -459,7 +459,7 @@ import '@jepepa/like-button/like-button.css'; // NEW - Required
 - Wave animations and hover/active states are now defined in an external CSS file
 - CSS custom properties are used for dynamic styling
 
-**Vanilla CSS users** are not affected - continue importing `@jepepa/like-button/styles.css` as before.
+**Vanilla CSS users** are not affected - continue importing `@jepepa/react-like-button/styles.css` as before.
 
 ## Contributing
 
