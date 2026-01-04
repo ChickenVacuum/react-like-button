@@ -69,7 +69,7 @@ import '@jepepa/react-like-button/styles.css';
 
 function App() {
   return (
-    <LikeButtonVanilla 
+    <LikeButtonVanilla
       onClick={(clicks) => console.log('Total clicks:', clicks)}
       particlePreset="confetti"
     />
