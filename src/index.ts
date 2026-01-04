@@ -1,3 +1,8 @@
+// Main entry point (Tailwind CSS version)
+//
+// ⚠️  IMPORTANT: When adding or removing exports, update BOTH index.ts and vanilla.ts
+//     to keep the API surface consistent across entry points.
+
 // ============================================================================
 // CORE COMPONENTS
 // ============================================================================
