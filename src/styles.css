@@ -1,0 +1,10 @@
+/**
+ * @fmarlats/react-like-button - Vanilla CSS Styles
+ *
+ * Import this file when using LikeButtonVanilla:
+ * import '@fmarlats/react-like-button/styles.css';
+ */
+
+@import "./LikeButton/LikeButton.vanilla.css";
+@import "./Particle/Particle.vanilla.css";
+

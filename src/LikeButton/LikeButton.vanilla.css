@@ -1,0 +1,164 @@
+/* LikeButton Vanilla CSS - No Tailwind dependency */
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes wave-scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes wave-scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   Container
+   ============================================ */
+
+.like-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* ============================================
+   Button Base
+   Note: border-radius, border, box-shadow, and
+   background-color are set via inline styles
+   to support customization props
+   ============================================ */
+
+.like-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23EF4444'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E"),
+    pointer;
+}
+
+/* ============================================
+   Focus States
+   ============================================ */
+
+.like-button:focus {
+  outline: none;
+}
+
+.like-button:focus-visible {
+  outline: 4px solid #111827;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Hover State (uses CSS custom properties)
+   ============================================ */
+
+.like-button:hover:not(:disabled) {
+  box-shadow: var(--hover-shadow-offset) var(--hover-shadow-offset) 0px var(--shadow-color);
+  transform: translate(var(--translate-hover), var(--translate-hover));
+}
+
+/* ============================================
+   Active State (uses CSS custom properties)
+   ============================================ */
+
+.like-button:active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(var(--shadow-offset), var(--shadow-offset)) scale(0.9);
+}
+
+/* ============================================
+   Disabled State
+   ============================================ */
+
+.like-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.like-button:disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
+}
+
+/* ============================================
+   Liquid Fill
+   ============================================ */
+
+.like-button__fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  transition: height 0.5s ease-out;
+}
+
+/* ============================================
+   Wave Containers
+   ============================================ */
+
+.like-button__wave {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 200%;
+  height: 16px;
+  display: flex;
+}
+
+.like-button__wave--back {
+  animation: wave-scroll-left 3s linear infinite;
+}
+
+.like-button__wave--front {
+  animation: wave-scroll-right 1.5s linear infinite;
+}
+
+.like-button__wave-svg {
+  width: 50%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* ============================================
+   Icon
+   ============================================ */
+
+.like-button__icon {
+  position: relative;
+  z-index: 20;
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+
+/* ============================================
+   Particles Container
+   ============================================ */
+
+.like-button__particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
